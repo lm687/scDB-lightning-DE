@@ -1,0 +1,8 @@
+SAMPLE1&5 GROUP1: 2' red light
+SAMPLE2&6 GROUP2: 2' CS1- / 30sec break / 2'CS2-  
+SAMPLE3&7 GROUP3: 2' CS- / 30sec break / 2' CS+ & red light 
+SAMPLE4&8 GROUP4: 2' CS- & water / 30sec break / 2' CS+ & sugar
+
+## about conda environment
+ruffusenv
+

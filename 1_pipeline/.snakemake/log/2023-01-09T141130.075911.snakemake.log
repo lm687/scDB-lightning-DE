@@ -1,0 +1,3 @@
+KeyError in file /Filers/home/l/lmorrill/projects/lighting/1_pipeline/Snakefile, line 29:
+'samples'
+  File "/Filers/home/l/lmorrill/projects/lighting/1_pipeline/Snakefile", line 29, in <module>

@@ -1,0 +1,5 @@
+KeyError in file /Filers/home/l/lmorrill/projects/lighting/1_pipeline/Snakefile, line 14:
+1
+  File "/Filers/home/l/lmorrill/projects/lighting/1_pipeline/Snakefile", line 14, in <module>
+  File "/home/l/lmorrill/t1data/conda/rufus_env/envs/snakemake_scRNA/lib/python3.11/site-packages/pandas/core/frame.py", line 3805, in __getitem__
+  File "/home/l/lmorrill/t1data/conda/rufus_env/envs/snakemake_scRNA/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3805, in get_loc

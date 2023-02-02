@@ -1,0 +1,7 @@
+IndexingError in file /Filers/home/l/lmorrill/projects/lighting/1_pipeline/Snakefile, line 16:
+Too many indexers
+  File "/Filers/home/l/lmorrill/projects/lighting/1_pipeline/Snakefile", line 16, in <module>
+  File "/home/l/lmorrill/t1data/conda/rufus_env/envs/snakemake_scRNA/lib/python3.11/site-packages/pandas/core/indexing.py", line 1067, in __getitem__
+  File "/home/l/lmorrill/t1data/conda/rufus_env/envs/snakemake_scRNA/lib/python3.11/site-packages/pandas/core/indexing.py", line 1563, in _getitem_tuple
+  File "/home/l/lmorrill/t1data/conda/rufus_env/envs/snakemake_scRNA/lib/python3.11/site-packages/pandas/core/indexing.py", line 869, in _validate_tuple_indexer
+  File "/home/l/lmorrill/t1data/conda/rufus_env/envs/snakemake_scRNA/lib/python3.11/site-packages/pandas/core/indexing.py", line 908, in _validate_key_length

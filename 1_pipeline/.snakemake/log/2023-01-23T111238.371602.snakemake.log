@@ -1,0 +1,28 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cluster nodes: 6
+Job stats:
+job                 count    min threads    max threads
+----------------  -------  -------------  -------------
+all                     1              1              1
+cellranger_count        1              1              1
+total                   2              1              1
+
+Select jobs to execute...
+
+[Mon Jan 23 11:13:10 2023]
+rule cellranger_count:
+    input: ../data/lightning/about_files/about-condition-G1_rep1.txt
+    output: /project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/G1_rep1/filtered_feature_bc_matrix/features.tsv.gz
+    log: logs/cellranger_count_G1_rep1
+    jobid: 1
+    reason: Missing output files: /project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/G1_rep1/filtered_feature_bc_matrix/features.tsv.gz
+    wildcards: sample=G1_rep1
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+cd /project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/G1_rep1/; /project/sims-lab/lmorrill/cellranger/cellranger-7.1.0/bin/cellranger count --id=G1_rep1 --fastqs=/project/cncb/shared/proj002/backup/CELLRANGER_OUT/ --sample=636200_14,654654_14,660727_14,660728_14,660729_14,660730_14,660731_14,660732_14 --transcriptome=/project/sims-lab/lmorrill/data/genomes/dmel649CORRECTED --chemistry=SC3Pv3 --force-cells=10000 --nosecondary
+Error submitting jobscript (exit code 255):
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2023-01-23T111238.371602.snakemake.log

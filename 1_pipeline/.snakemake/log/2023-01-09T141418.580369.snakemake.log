@@ -1,0 +1,7 @@
+Building DAG of jobs...
+MissingInputException in rule cellranger_count in file /Filers/home/l/lmorrill/projects/lighting/1_pipeline/Snakefile, line 31:
+Missing input files for rule cellranger_count:
+    output: /home/l/lmorrill/t1data/data/lightning/cellrangerOUT/G1_rep1/filtered_feature_bc_matrix/features.tsv.gz
+    wildcards: sample=G1_rep1
+    affected files:
+        ../data/lightning/about_files/about-condition-{wildcards.sample}.txt

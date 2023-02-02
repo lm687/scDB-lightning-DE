@@ -1,0 +1,23 @@
+## to activate conda environment for ruffus
+conda activate base
+
+## ruffus was installed as follows, from the conda environment
+pip install ruffus --upgrade
+
+## For snakemake
+### mamba was installed as follows
+conda install mamba
+
+## creating conda environment in which to download snakemake
+mamba create -c conda-forge -c bioconda -n snakemake_scRNA snakemake
+
+conda activate snakemake_scRNA
+
+# to use snakemake
+snakemake ...
+
+
+## about the pipeline
+# the snakemake pieline crashes at cellranger_count if there is an output folder which the command is trying to create
+
+
