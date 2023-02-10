@@ -1,7 +1,17 @@
 import pandas as pd
 
 ## this the folder where the results from cellranger are going to go
-folder_out_cellranger="/project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/"
+
+alignment_type = 'cellranger'
+
+if alignment_type == 'cellranger':
+        print('Using cellranger')
+	folder_out_alignment="/project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/"
+elif alignment_type == 'kallisto':
+        print('Using Kallisto')
+        folder_out_alignment="/project/sims-lab/lmorrill/data/lightning/alignment/KallistoOUT/"
+else:
+        print('Specify <alignment_type>')
 
 SAMPLES = pd.read_csv("samples.csv", sep='\t')
 print(SAMPLES)
@@ -25,16 +35,20 @@ print(SAMPLES)
 #/home/l/lmorrill/t1data/cellranger/cellranger-7.1.0/bin/cellranger count --id=G1_rep1 --fastqs=/t1-data/project/cncb/shared/proj002/backup/CELLRANGER_OUT/ --sample=636200_14,654654_14,660727_14,660728_14,660729_14,660730_14,660731_14,660732_14 --transcriptome=/home/l/lmorrill/t1data/data/genomes/dmel649CORRECTED --chemistry=SC3Pv3 --localcores=$LC --localmem=$LM --force-cells=10000 --nosecondary
 
 ## fixed parameters
-transcriptome="/project/sims-lab/lmorrill/data/genomes/dmel649CORRECTED"
+#transcriptome_version = 'dmel649CORRECTED'
+transcriptome_version = 'dmel649Chrimson'
+transcriptome="/project/sims-lab/lmorrill/data/genomes/" + transcriptome_version
 chemistry="SC3Pv3"
 #job_threads=2
 local_memory="100"
 #local_memory="300"
 local_cores="24"
 
+folder_out_alignment = folder_out_alignment + transcriptome_version + '/'
+
 rule all:
     input:
-        expand(folder_out_cellranger+"{sample}/outs/filtered_feature_bc_matrix/features.tsv.gz", sample=SAMPLES["sample"])
+        expand(folder_out_alignment+"{sample}/{sample}/outs/filtered_feature_bc_matrix/features.tsv.gz", sample=SAMPLES["sample"])
 
 rule cellranger_count:
     input:
@@ -44,10 +58,11 @@ rule cellranger_count:
     params:
         cells= lambda wildcards: SAMPLES[SAMPLES['sample'] == wildcards.sample]['cells'].iloc[0]
     output:
-       folder_out_cellranger+"{sample}/outs/filtered_feature_bc_matrix/features.tsv.gz"
+       folder_out_alignment+"{sample}/{sample}/outs/filtered_feature_bc_matrix/features.tsv.gz"
     shell:
+## output folder from snakemake has to be deleted because otherwise cellranger complains
 #        "cd {folder_out_cellranger}{wildcards.sample}/; /home/l/lmorrill/t1data/cellranger/cellranger-7.1.0/bin/cellranger count --id={wildcards.sample} --fastqs=/t1-data/project/cncb/shared/proj002/backup/CELLRANGER_OUT/ --sample={params.cells} --transcriptome={transcriptome} --chemistry={chemistry} --localcores={local_cores} --localmem={local_memory} --force-cells=10000 --nosecondary"
-        "cd {folder_out_cellranger}/{wildcards.sample}; /project/sims-lab/lmorrill/cellranger/cellranger-7.1.0/bin/cellranger count --id={wildcards.sample} --fastqs=/project/cncb/shared/proj002/backup/CELLRANGER_OUT/ --sample={params.cells} --transcriptome={transcriptome} --chemistry={chemistry} --force-cells=10000 --nosecondary"
+        "cd {folder_out_alignment}/{wildcards.sample}; " + "rm -r " + folder_out_alignment +"{wildcards.sample}/{wildcards.sample}; " + "/project/sims-lab/lmorrill/cellranger/cellranger-7.1.0/bin/cellranger count --id={wildcards.sample} --fastqs=/project/cncb/shared/proj002/backup/CELLRANGER_OUT/ --sample={params.cells} --transcriptome={transcriptome} --chemistry={chemistry} --force-cells=10000 --nosecondary"
 
 #        "/home/l/lmorrill/t1data/cellranger/cellranger-7.1.0/bin/cellranger count --id={wildcards.sample} --fastqs=/t1-data/project/cncb/shared/proj002/backup/CELLRANGER_OUT/ --sample={cells} --transcriptome={transcriptome} --chemistry={chemistry} --localcores={local_cores} --localmem={local_memory} --force-cells=10000 --nosecondary"
 

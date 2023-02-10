@@ -1,0 +1,40 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cluster nodes: 6
+Job stats:
+job                 count    min threads    max threads
+----------------  -------  -------------  -------------
+all                     1              1              1
+cellranger_count        1              1              1
+total                   2              1              1
+
+Select jobs to execute...
+
+[Fri Feb  3 10:04:54 2023]
+rule cellranger_count:
+    input: ../data/lightning/about_files/about-condition-G4_rep1.txt
+    output: /project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/G4_rep1/G4_rep1/outs/filtered_feature_bc_matrix/features.tsv.gz
+    log: logs/cellranger_count_G4_rep1
+    jobid: 7
+    reason: Missing output files: /project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/G4_rep1/G4_rep1/outs/filtered_feature_bc_matrix/features.tsv.gz
+    wildcards: sample=G4_rep1
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+cd /project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT//G4_rep1; rm -r /project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/G4_rep1/G4_rep1; /project/sims-lab/lmorrill/cellranger/cellranger-7.1.0/bin/cellranger count --id=G4_rep1 --fastqs=/project/cncb/shared/proj002/backup/CELLRANGER_OUT/ --sample=636200_17,654654_17,660727_17,660728_17,660729_17,660730_17,660731_17,660732_17 --transcriptome=/project/sims-lab/lmorrill/data/genomes/dmel649CORRECTED --chemistry=SC3Pv3 --force-cells=10000 --nosecondary
+Submitted job 7 with external jobid 'Submitted batch job 4944967'.
+[Tue Feb  7 03:09:45 2023]
+Finished job 7.
+1 of 2 steps (50%) done
+Select jobs to execute...
+
+[Tue Feb  7 03:09:45 2023]
+localrule all:
+    input: /project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/G1_rep1/G1_rep1/outs/filtered_feature_bc_matrix/features.tsv.gz, /project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/G1_rep2/G1_rep2/outs/filtered_feature_bc_matrix/features.tsv.gz, /project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/G2_rep1/G2_rep1/outs/filtered_feature_bc_matrix/features.tsv.gz, /project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/G2_rep2/G2_rep2/outs/filtered_feature_bc_matrix/features.tsv.gz, /project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/G3_rep1/G3_rep1/outs/filtered_feature_bc_matrix/features.tsv.gz, /project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/G3_rep2/G3_rep2/outs/filtered_feature_bc_matrix/features.tsv.gz, /project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/G4_rep1/G4_rep1/outs/filtered_feature_bc_matrix/features.tsv.gz, /project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/G4_rep2/G4_rep2/outs/filtered_feature_bc_matrix/features.tsv.gz
+    jobid: 0
+    reason: Input files updated by another job: /project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/G4_rep1/G4_rep1/outs/filtered_feature_bc_matrix/features.tsv.gz
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=/tmp
+
+[Tue Feb  7 03:09:45 2023]
+Finished job 0.
+2 of 2 steps (100%) done
+Complete log: .snakemake/log/2023-02-03T100452.276753.snakemake.log

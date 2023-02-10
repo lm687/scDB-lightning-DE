@@ -64,14 +64,90 @@ give_top_logf_genes <- function(i, include_separation_row=T, n=6L){
   }
 }
 
+give_top_logf_genes_val <- function(i, include_separation_row=T, n=6L){
+  cat('Sorting by p-value\n')
+  i <- i[order(i$p_val_adj, na.last = T),]
+  return(head(i, n=n))
+}
+
+
 give_cluster_specific_DE <- function(seurat_obj, cluster_name=NULL, group.by_arg=NULL, ident.1_arg, ident.2_arg){
+  warning('Function <FoldChanges> has been replaced by <FindMarkers> in order to find p-values and test for DE')
   stopifnot(!is.null(cluster_name))
   stopifnot(!is.null(group.by_arg))
-  clusters <- sort(unique(Chrimsonposcells@meta.data[,cluster_name]))
+  clusters <- sort(unique(seurat_obj@meta.data[,cluster_name]))
   res <- lapply(clusters, function(cluster_it){
-    subset_cells <- subset(Chrimsonposcells, cells = which(Chrimsonposcells@meta.data[,cluster_name] == cluster_it))
-    Seurat::FoldChange(subset_cells, ident.1=ident.1_arg, ident.2_arg, group.by=group.by_arg)
+    subset_cells <- subset(seurat_obj, cells = which(seurat_obj@meta.data[,cluster_name] == cluster_it))
+    Seurat::FindMarkers(subset_cells, ident.1=ident.1_arg, ident.2_arg, group.by=group.by_arg)
   })
   names(res) <- clusters
   return(res)
+}
+
+normalise_rw <- function(i){
+  sweep(i, 1, rowSums(i), '/')
+}
+rownames_to_col <- function(i){
+  data.frame(names=rownames(i), i)
+}
+
+firstcol_to_rownames <- function(i){
+  rownames(i) <- i[,1]
+  i[,-1]
+}
+
+na_to_zeros <- function(i){
+  i[is.na(i)] <- 0
+  i
+}
+
+relevel_by_value_column <- function(i){
+  i$names <- factor(i$names, levels=i$names[order(i$value)])
+  return(i)
+}
+
+give_name_conversion_file <- function(return_from_fb=T){
+  library("AnnotationDbi")
+  library("org.Dm.eg.db")
+  
+  
+  if(return_from_fb){
+    # fly_genes <- read.table("/home/l/lmorrill/projects/general/fb_synonym_fb_2022_06_cut.tsv", sep = "\t", comment.char = "^#")
+    # fly_genes <- read.table("/home/l/lmorrill/projects/general/fb_synonym_fb_2022_06_cut.tsv", sep = "\t")
+    fly_genes <- read.table("/home/l/lmorrill/projects/general/fb_synonym_fb_2022_06_cut.tsv")
+    # fly_genes[grepl('fly_genes', fly_genes$V1)]
+    # dim(fly_genes)
+    # system("wc -l /home/l/lmorrill/projects/general/fb_synonym_fb_2022_06.tsv")
+    ## rows are missing
+    
+    # fly_genes[1:2,1]
+    # fly_genes[,2][match('FBgn0024733', fly_genes[,1])]
+    # fly_genes[,2][match('FBgn0031081', fly_genes[,1])]
+
+    return(fly_genes)
+   
+    ## there are many NAs in gene names
+  }else{
+    
+    # https://www.biostars.org/p/70821/
+    # resadj <- as.data.frame(resadj)
+    # res$symbol <- mapIds(org.Dm.eg.db, 
+    #                      keys=row.names(res), 
+    #                      column="SYMBOL", 
+    #                      keytype="ENSEMBL",
+    #                      multiVals="first")
+    # 
+    # res$entrez <- mapIds(org.Dm.eg.db, 
+    #                      keys=row.names(res), 
+    #                      column="ENTREZID", 
+    #                      keytype="ENSEMBL",
+    #                      multiVals="first")
+    # 
+    # res$name =   mapIds(org.Dm.eg.db,
+    #                     keys=row.names(res), 
+    #                     column="GENENAME",
+    #                     keytype="ENSEMBL",
+    #                     multiVals="first")
+    # write.csv(res, file = "/home/l/lmorrill/projects/general/results_FlyBaseIDS_GeneNames.csv", sep = "\t", quote = F)
+  }
 }
