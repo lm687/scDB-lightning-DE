@@ -87,6 +87,10 @@ give_cluster_specific_DE <- function(seurat_obj, cluster_name=NULL, group.by_arg
 normalise_rw <- function(i){
   sweep(i, 1, rowSums(i), '/')
 }
+
+normalise_cl <- function(i){
+  (sweep(i, 2, colSums(i), '/'))
+}
 rownames_to_col <- function(i){
   data.frame(names=rownames(i), i)
 }
@@ -94,6 +98,10 @@ rownames_to_col <- function(i){
 firstcol_to_rownames <- function(i){
   rownames(i) <- i[,1]
   i[,-1]
+}
+
+remove_cols_with_na <- function(i){
+  i[,!is.na(colSums(i))]
 }
 
 na_to_zeros <- function(i){
