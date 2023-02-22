@@ -44,7 +44,8 @@ add_dimred <- function(seurat_obj){
   cat('Running PCA...\n')
   seurat_obj <- RunPCA(seurat_obj, npcs = 60)
   cat('Running UMAP\n')
-  seurat_obj <- RunUMAP(seurat_obj, reduction = "pca", dims = 1:60)
+  # seurat_obj <- RunUMAP(seurat_obj, reduction = "pca", dims = 1:60, umap.method='umap-learn') ## couldn't install it locally (??)
+  seurat_obj <- RunUMAP(seurat_obj, reduction = "pca", dims = 1:60, umap.method='uwot')
   cat('Finding neighbours...\n')
   seurat_obj <- FindNeighbors(seurat_obj, reduction = "pca", dims = 1:60)
   cat('Finding clusters...\n')
@@ -85,8 +86,18 @@ give_cluster_specific_DE <- function(seurat_obj, cluster_name=NULL, group.by_arg
 }
 
 normalise_rw <- function(i){
-  sweep(i, 1, rowSums(i), '/')
+  if(is.null(dim(i))){
+    i/sum(i)
+  }else{
+    sweep(i, 1, rowSums(i), '/')
+  }
 }
+
+
+normalise_cl <- function(i){
+  sweep(i, 2, colSums(i), '/')
+}
+
 rownames_to_col <- function(i){
   data.frame(names=rownames(i), i)
 }
@@ -106,15 +117,16 @@ relevel_by_value_column <- function(i){
   return(i)
 }
 
-give_name_conversion_file <- function(return_from_fb=T){
-  library("AnnotationDbi")
-  library("org.Dm.eg.db")
+give_name_conversion_file <- function(return_from_fb=T,
+                                      path_tsv_genes="/home/l/lmorrill/projects/general/fb_synonym_fb_2022_06_cut.tsv"){
+  # library("AnnotationDbi")
+  # library("org.Dm.eg.db")
   
   
   if(return_from_fb){
     # fly_genes <- read.table("/home/l/lmorrill/projects/general/fb_synonym_fb_2022_06_cut.tsv", sep = "\t", comment.char = "^#")
     # fly_genes <- read.table("/home/l/lmorrill/projects/general/fb_synonym_fb_2022_06_cut.tsv", sep = "\t")
-    fly_genes <- read.table("/home/l/lmorrill/projects/general/fb_synonym_fb_2022_06_cut.tsv")
+    fly_genes <- read.table(path_tsv_genes)
     # fly_genes[grepl('fly_genes', fly_genes$V1)]
     # dim(fly_genes)
     # system("wc -l /home/l/lmorrill/projects/general/fb_synonym_fb_2022_06.tsv")
@@ -150,4 +162,26 @@ give_name_conversion_file <- function(return_from_fb=T){
     #                     multiVals="first")
     # write.csv(res, file = "/home/l/lmorrill/projects/general/results_FlyBaseIDS_GeneNames.csv", sep = "\t", quote = F)
   }
+}
+
+convert_FB_to_name <- function(i){
+  name_conversion_file$V2[match(i, name_conversion_file$V1)]
+}
+
+
+my_VlnPlot <- function(seurat_object, features, aggregation_fun='median', arg_ncol=4, logtrans=T){
+  subsetbiomarkers <- reshape2::melt(as(seurat_object@assays$RNA@counts[features,], 'matrix'))
+  subsetbiomarkers$cluster <- seurat_object$seurat_clusters[match(subsetbiomarkers$Var2, colnames(seurat_object@assays$RNA@counts))]
+  a <- ggplot(subsetbiomarkers, aes(x=cluster, y=value, group=cluster))+
+    geom_boxplot()+
+    geom_jitter(alpha=0.2)+
+    facet_wrap(.~Var1, ncol=arg_ncol, scales = "free_y")
+  if(logtrans){
+    a <- a + scale_y_continuous(trans = "log2")
+  }
+  a+theme_bw()
+}
+
+add_genenames <- function(i){
+  lapply(i, function(j) cbind.data.frame(gene=rownames(j), j))
 }
