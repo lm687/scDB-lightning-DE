@@ -355,7 +355,7 @@ umap_single_facet_with_topmarker(seurat_obj = combined_dataset, markers = MARKER
 # seurat_name_clusters = 'integrated_snn_res.0.01'
 
 ## go term of markers of each cluster
-
+MARKERS_lowest_granularity[MARKERS_lowest_granularity$cluster == 0,'gene']
 
 ## --------------------------------------------------------- ##
 

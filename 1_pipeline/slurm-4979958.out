@@ -497,3 +497,148 @@ samtools: samtools 1.12
 2023-02-10 15:15:06 [runtime] (update)          ID.G4_rep1.SC_RNA_COUNTER_CS.SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0 chunks running (5/13 completed)
 2023-02-10 15:21:07 [runtime] (update)          ID.G4_rep1.SC_RNA_COUNTER_CS.SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0 chunks running (5/13 completed)
 2023-02-10 15:27:07 [runtime] (update)          ID.G4_rep1.SC_RNA_COUNTER_CS.SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0 chunks running (5/13 completed)
+2023-02-10 15:33:07 [runtime] (update)          ID.G4_rep1.SC_RNA_COUNTER_CS.SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0 chunks running (5/13 completed)
+2023-02-10 15:39:06 [runtime] (update)          ID.G4_rep1.SC_RNA_COUNTER_CS.SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0 chunks running (5/13 completed)
+2023-02-10 15:45:08 [runtime] (update)          ID.G4_rep1.SC_RNA_COUNTER_CS.SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0 chunks running (5/13 completed)
+2023-02-10 15:51:06 [runtime] (update)          ID.G4_rep1.SC_RNA_COUNTER_CS.SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0 chunks running (5/13 completed)
+2023-02-10 15:57:08 [runtime] (update)          ID.G4_rep1.SC_RNA_COUNTER_CS.SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0 chunks running (5/13 completed)
+2023-02-10 16:03:06 [runtime] (update)          ID.G4_rep1.SC_RNA_COUNTER_CS.SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0 chunks running (5/13 completed)
+2023-02-10 16:09:07 [runtime] (update)          ID.G4_rep1.SC_RNA_COUNTER_CS.SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0 chunks running (5/13 completed)
+2023-02-10 16:15:08 [runtime] (update)          ID.G4_rep1.SC_RNA_COUNTER_CS.SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0 chunks running (5/13 completed)
+2023-02-10 16:21:07 [runtime] (update)          ID.G4_rep1.SC_RNA_COUNTER_CS.SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0 chunks running (5/13 completed)
+2023-02-10 16:27:08 [runtime] (update)          ID.G4_rep1.SC_RNA_COUNTER_CS.SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0 chunks running (5/13 completed)
+2023-02-10 16:32:08 [runtime] (update)          ID.G4_rep1.SC_RNA_COUNTER_CS.SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0 chunks running (6/13 completed)
+2023-02-10 16:38:06 [runtime] (update)          ID.G4_rep1.SC_RNA_COUNTER_CS.SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0 chunks running (6/13 completed)
+2023-02-10 16:44:08 [runtime] (update)          ID.G4_rep1.SC_RNA_COUNTER_CS.SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0 chunks running (6/13 completed)
+2023-02-10 16:50:09 [runtime] (update)          ID.G4_rep1.SC_RNA_COUNTER_CS.SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0 chunks running (6/13 completed)
+2023-02-10 16:56:07 [runtime] (update)          ID.G4_rep1.SC_RNA_COUNTER_CS.SC_MULTI_CORE.MULTI_GEM_WELL_PROCESSOR.COUNT_GEM_WELL_PROCESSOR._BASIC_SC_RNA_COUNTER._MATRIX_COMPUTER.ALIGN_AND_COUNT.fork0 chunks running (6/13 completed)
+slurmstepd: error: *** JOB 4979958 ON cbrgwn009p CANCELLED AT 2023-02-10T17:01:02 ***
+CBB Profiling started Thu Feb  9 04:01:17 2023
+SLURM_JOB_ID		4979958
+REQ_CPU_CORES		1
+REQ_MEMORY_GB		10.000000
+Starting profiling...
+
+                                                                                
+                                                                                
+                                    CPU (cores)                                 
+  1.1 +---------------------------------------------------------------------+   
+      |             +             +             +             +             |   
+      |                                                                     |   
+    1 |**########*******************************#****************         +-|   
+      | ##      #################################################           |   
+      |###         ##        #        #        ###      #      #            |   
+      |###         #         #        #        #        #      #            |   
+  0.9 |#+#         #         #        #        #        #      #          +-|   
+      |  #         #         #        #        #        #      #            |   
+      |  #         #         #        #        #        #      #            |   
+  0.8 |-+#         #         #                 #        #      #          +-|   
+      |  #         #         #                 #        #                   |   
+      |            #         #                 #        #                   |   
+  0.7 |-+          #         #                 #        #                 +-|   
+      |            #         #                          #                   |   
+      |            #         #                          #                   |   
+  0.6 |-+          #         #                          #                 +-|   
+      |            #         #                                              |   
+      |            #                                                        |   
+      |            #                                                        |   
+  0.5 |-+          #                                                      +-|   
+      |            #                                                        |   
+      |             +             +             +             +             |   
+  0.4 +---------------------------------------------------------------------+   
+      0            500           1000          1500          2000          2500 
+                                Job profiling step                              
+                                                                                
+
+                                                                                
+                                                                                
+                                   Memory (GB)                                  
+  10 +----------------------------------------------------------------------+   
+     |             +             +              +             +             |   
+   9 |-+                                                                  +-|   
+     |                                                                      |   
+     |                                                                      |   
+   8 |-+                                                                  +-|   
+     |                                                                      |   
+   7 |-+                                                                  +-|   
+     |                                                                      |   
+   6 |-+                                                                  +-|   
+     |                                                                      |   
+   5 |-+                                                                  +-|   
+     |                                                                      |   
+     |                                                                      |   
+   4 |-+                                                                  +-|   
+     |                                                                      |   
+   3 |-+                                                                  +-|   
+     |                                     #                                |   
+   2 |-+#########################################################         +-|   
+     |  #         #         #        #        #         #      #            |   
+     |###                            #                                      |   
+   1 |###                            #                                    +-|   
+     |###          +             +   #          +             +             |   
+   0 +----------------------------------------------------------------------+   
+     0            500           1000           1500          2000          2500 
+                               Job profiling step                               
+                                                                                
+
+                                                                                
+                                                                                
+                                 Data read (GB)                                 
+  60 +----------------------------------------------------------------------+   
+     |             +             +              +             +             |   
+     |                                                                      |   
+     |                                                         ##           |   
+  50 |-+                                                ########          +-|   
+     |                                              ####                    |   
+     |                                        #######                       |   
+     |                                #########                             |   
+  40 |-+                           ####                                   +-|   
+     |                      ########                                        |   
+     |               ########                                               |   
+  30 |-+          ####                                                    +-|   
+     |  ###########                                                         |   
+     |  #                                                                   |   
+     |  #                                                                   |   
+  20 |-##                                                                 +-|   
+     | #                                                                    |   
+     |##                                                                    |   
+     |#                                                                     |   
+  10 |#+                                                                  +-|   
+     |#                                                                     |   
+     |                                                                      |   
+     |             +             +              +             +             |   
+   0 +----------------------------------------------------------------------+   
+     0            500           1000           1500          2000          2500 
+                               Job profiling step                               
+                                                                                
+
+                                                                                
+                                                                                
+                                Data written (GB)                               
+  50 +----------------------------------------------------------------------+   
+     |             +             +              +             ###           |   
+  45 |-+                                             ##########           +-|   
+     |                                       #########                      |   
+     |                              ##########                              |   
+  40 |-+                    #########                                     +-|   
+     |             ##########                                               |   
+  35 |-+  ##########                                                      +-|   
+     |  ###                                                                 |   
+  30 |-+#                                                                 +-|   
+     | #                                                                    |   
+  25 |-#                                                                  +-|   
+     | #                                                                    |   
+     | #                                                                    |   
+  20 |-#                                                                  +-|   
+     |##                                                                    |   
+  15 |#+                                                                  +-|   
+     |#                                                                     |   
+  10 |#+                                                                  +-|   
+     |#                                                                     |   
+     |#                                                                     |   
+   5 |-+                                                                  +-|   
+     |             +             +              +             +             |   
+   0 +----------------------------------------------------------------------+   
+     0            500           1000           1500          2000          2500 
+                               Job profiling step                               
+                                                                                
