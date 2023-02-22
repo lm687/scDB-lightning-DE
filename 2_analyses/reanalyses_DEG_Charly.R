@@ -255,7 +255,7 @@ MARKERS_lower_granularity_top1_dcast <- na_to_zeros(firstcol_to_rownames(dcast(M
 MARKERS_lower_granularity_top1[order(MARKERS_lower_granularity_top1$gene),]
 pheatmap::pheatmap(MARKERS_lower_granularity_top1_dcast)
 
-if(input_objs =='CharlyCellRanger'){
+ßif(input_objs =='CharlyCellRanger'){
 ggplot(MARKERS_lower_granularity_top1, aes(x=as.numeric(cluster), y = factor(gene, levels=rev(gtools::mixedsort(gene))), fill=avg_log2FC))+
   geom_tile()+
   annotate("text", x = length(MARKERS_lower_granularity_top1$cluster)+10, y = 1, label = "Glutamatergic neurons", hjust = 0)+
@@ -358,7 +358,7 @@ col_vector <- sample(colours(), size = 100)
 # col_vector <- readRDS("~/small_practical_robjects/col_vector1.RDS")
 # saveRDS(col_vector, "~/small_practical_robjects/col_vector3.RDS")
 
-umap_single_facet_with_topmarker <- function(seurat_obj, markers, seurat_name_clusters){
+umap_single_facet_with_topmarker <- function(seurat_obj, markers, seurat_name_clusters,density_map=F){
   reduction_df <- data.frame(Reductions(seurat_obj, 'umap')@cell.embeddings)
   reduction_df$clusters <- seurat_obj[[seurat_name_clusters]][,1]
   reduction_df$topmarker <- NA
@@ -369,9 +369,16 @@ umap_single_facet_with_topmarker <- function(seurat_obj, markers, seurat_name_cl
                    topmarker = markers$gene[sapply(unique(reduction_df$clusters), function(i) which(markers$cluster == i)[1])])
   )
   
-  ggplot(reduction_df, aes(x=UMAP_1, y=UMAP_2, label=topmarker, col=clusters))+geom_point()+theme_bw()+
-    geom_label_repel()+
-    scale_color_manual(values = col_vector)
+  if(density_map){
+    ggplot(reduction_df, aes(x=UMAP_1, y=UMAP_2, label=topmarker, col=clusters))+geom_density_2d()+theme_bw()+
+      geom_label_repel()+
+      scale_color_manual(values = col_vector)    
+  }else{
+    ## points
+    ggplot(reduction_df, aes(x=UMAP_1, y=UMAP_2, label=topmarker, col=clusters))+geom_point()+theme_bw()+
+      geom_label_repel()+
+      scale_color_manual(values = col_vector)
+  }
   
 }
 
@@ -384,6 +391,9 @@ ggsave(paste0(folder_results, input_objs, "/umap_clusters_lowerst_granularity_ma
 # seurat_obj = combined_dataset
 # markers = MARKERS_lowest_granularity
 # seurat_name_clusters = 'integrated_snn_res.0.01'
+
+## go term of markers of each cluster
+
 
 ## --------------------------------------------------------- ##
 
@@ -450,10 +460,26 @@ biomarkers_list_vec <- c(biomarkers_list$`gene name`, 'Vmat', 'DAT', 'Frq1', 'ot
 #   aggregate(x = as(combined_dataset@assays$RNA@counts[biomarker_it,], 'vector'), by = list(clusters=combined_dataset$seurat_clusters), FUN='mean')[,2]
 # })
 ## aggregate by median
+## Charlys and my dataset have subtle differences in the gene names
+biomarkers_list_vec <- unique(c(biomarkers_list_vec, biomarkers_list$`other name`[!(biomarkers_list_vec %in% rownames(combined_dataset@assays$RNA@counts))]))
+biomarkers_list_vec <- biomarkers_list_vec[(biomarkers_list_vec %in% rownames(combined_dataset@assays$RNA@counts))]
+
 biomarkers_across_clusters <- sapply(biomarkers_list_vec, function(biomarker_it){
   aggregate(x = as(combined_dataset@assays$RNA@counts[biomarker_it,], 'vector'), by = list(clusters=combined_dataset$seurat_clusters), FUN='median')[,2]
 })
 pheatmap::pheatmap(biomarkers_across_clusters)
+
+pheatmap::pheatmap(remove_cols_with_na(normalise_cl(biomarkers_across_clusters)))
+
+FeaturePlot(combined_dataset, features=biomarkers_list$`gene name`[grepl('KC', biomarkers_list$marker)]) ## KC markers
+
+pheatmap::pheatmap(ALL.average.expression$RNA[biomarkers_list$`gene name`[grepl('KC', biomarkers_list$marker)],]) ## KC markers
+pheatmap::pheatmap(scale(ALL.average.expression$RNA[biomarkers_list$`gene name`[grepl('KC', biomarkers_list$marker)],])) ## KC markers. scaled data. no clear clustering of KC vs non-KC?
+pheatmap::pheatmap(scale(center = T, ALL.average.expression$RNA[biomarkers_list_vec,]))
+pheatmap::pheatmap(scale(center = T, ALL.average.expression$integrated[remove_na(match(biomarkers_list_vec, rownames(ALL.average.expression$integrated))),]))
+
+dim(ALL.average.expression$RNA)
+dim(ALL.average.expression$integrated)
 
 # Seurat::clust (combined_dataset)
 
@@ -1362,3 +1388,7 @@ if(input_objs == 'CharlyCellRanger'){
   UMAPPlot(FEB2019_noTE)
   
 }
+
+system(paste0("ls ~/projects/lighting/data/robjects/", input_objs, "/image.RData"))
+save.image(file = paste0("~/projects/lighting/data/robjects/", input_objs, "/image.RData"))
+
