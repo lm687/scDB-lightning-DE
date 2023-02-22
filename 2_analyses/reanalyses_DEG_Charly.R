@@ -388,6 +388,7 @@ ggsave(paste0(folder_results, input_objs, "/umap_clusters_lowerst_granularity_ma
 umap_facets_with_topmarker(seurat_obj = combined_dataset, markers = MARKERS_lowest_granularity, seurat_name_clusters = 'integrated_snn_res.0.01')
 ggsave(paste0(folder_results, input_objs, "/umap_clusters_lowerst_granularity_markers_facets.pdf"), height = 8, width = 8)
 
+
 # seurat_obj = combined_dataset
 # markers = MARKERS_lowest_granularity
 # seurat_name_clusters = 'integrated_snn_res.0.01'
