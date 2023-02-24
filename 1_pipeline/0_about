@@ -1,3 +1,4 @@
+##----------------------------------------------------------------------------------------------------------------#
 ## to activate conda environment for ruffus
 conda activate base
 
@@ -19,5 +20,19 @@ snakemake ...
 
 ## about the pipeline
 # the snakemake pieline crashes at cellranger_count if there is an output folder which the command is trying to create
+##----------------------------------------------------------------------------------------------------------------#
+
+
+##----------------------------------------------------------------------------------------------------------------#
+## about the kallisto bustools pipeline
+conda create -n "py310" python=3.10 ipython
+# an old version of python is needed, as numba could not be downloaded in the latest verion of python
+# (see https://github.com/numba/numba/issues/8304)
+conda activate py310 ## activate the environment
+conda install -c bioconda -c conda-forge snakemake ## install snakemake in this environment
+pip install kb-python ## download kallisto bus in this environment (https://www.kallistobus.tools/kb_usage/kb_usage/)
+
+##----------------------------------------------------------------------------------------------------------------#
+
 
 

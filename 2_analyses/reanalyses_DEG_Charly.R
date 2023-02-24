@@ -1,9 +1,29 @@
 ## analyse DEG from Charly
 ## using some of his code
 
-rm(list = ls())
+##--------------------------------------------------------------------------------------------------##
 
+rm(list = ls())
 set.seed(1234)
+
+##--------------------------------------------------------------------------------------------------##
+
+## Where this is run: CCB cluster or locally
+local <- F
+
+## Dataset
+# input_objs <- 'CharlyCellRanger'
+# input_objs <- 'LenaCellRanger'
+input_objs <- 'LenaCellRangerChrimson'
+
+## Whether objects should be reloaded
+reload_objects <- F
+
+##--------------------------------------------------------------------------------------------------##
+
+.libPaths <- c(.libPaths(), "/Filers/home/l/lmorrill/R/x86_64-pc-linux-gnu-library/4.2", "/Filers/package/R-cbrg/current/4.2.0",
+                 "/Filers/package/R-base/4.2.0/lib64/R/library")
+system(paste0("mkdir -p ~/projects/lighting/data/robjects/", input_objs))
 
 library(Seurat)
 library(ggplot2)
@@ -17,21 +37,12 @@ library(reshape2)
 library(ggrepel)
 library(ggvenn)
 
-local <- T
 if(local){
   folder_results <- "~/Documents/projects/lightning/results/3_results/" ## local
 }else{
   setwd("/t1-data/project/cncb/shared/proj002/analyses/2020/10kCells/")
   folder_results <- "~/projects/lighting/3_results/" ## CCB cluster
 }
-
-# library(SingleR)
-# theme_set(theme_cowplot())
-
-# input_objs <- 'CharlyCellRanger'
-reload_objects <- F
-# input_objs <- 'LenaCellRanger'
-input_objs <- 'LenaCellRangerrerun'
 
 if(local){
   if(reload_objects){
@@ -73,11 +84,20 @@ if(input_objs %in% c('CharlyCellRanger')){
   Read10X("./FEB2019_G3_rep2/outs/filtered_feature_bc_matrix") -> FEB2019_G3_rep2.data
   Read10X("./FEB2019_G4_rep1/outs/filtered_feature_bc_matrix") -> FEB2019_G4_rep1.data
   Read10X("./FEB2019_G4_rep2/outs/filtered_feature_bc_matrix") -> FEB2019_G4_rep2.data
-}else if(input_objs %in% c('LenaCellRanger', 'LenaCellRangerrerun')){
+  
+}else if(input_objs %in% c('LenaCellRanger', 'LenaCellRangerrerun', 'LenaCellRangerChrimson')){
   if(local){
+    if(input_objs == 'LenaCellRangerChrimson'){
+      stop()
+    }
     folderLenaCellRanger <- '/Users/lenamorrill/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/dmel649CORRECTED/'
   }else{
-    folderLenaCellRanger <- '/project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/dmel649CORRECTED/'
+    if(input_objs == 'LenaCellRanger'){
+      folderLenaCellRanger <- '/project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/dmel649CORRECTED/'
+    }else if(input_objs == 'LenaCellRangerChrimson'){
+      folderLenaCellRanger <- '/project/sims-lab/lmorrill/data/lightning/alignment/cellrangerOUT/dmel649Chrimson/'
+    }
+  
   }
   Read10X(paste0(folderLenaCellRanger, "G1_rep1/G1_rep1/outs/filtered_feature_bc_matrix/")) -> FEB2019_G1_rep1.data
   Read10X(paste0(folderLenaCellRanger, "G1_rep2/G1_rep2/outs/filtered_feature_bc_matrix/")) -> FEB2019_G1_rep2.data
@@ -126,13 +146,16 @@ rm(FEB2019_G4_rep1)
 rm(FEB2019_G4_rep2)
 
 ## Change name of features, if necessary
-if(input_objs %in% c('LenaCellRanger', 'LenaCellRangerrerun')){
+if(input_objs %in% c('LenaCellRanger', 'LenaCellRangerrerun', 'LenaCellRangerChrimson')){
   
   if(local){
     name_conversion_file <- give_name_conversion_file(path_tsv_genes = '/Users/lenamorrill/Documents/projects/general/genes/fb_synonym_fb_2022_06_cut.tsv')
   }else{
     name_conversion_file <- give_name_conversion_file()
   }
+  ## add chrimson
+  name_conversion_file <- rbind(name_conversion_file, c('FBto0000555', 'Chrimson'))
+  
   for(i in 1:length(all_samples)){
     stopifnot(rownames(all_samples[[i]]@assays$RNA@data) == all_samples[[i]]@assays$RNA@counts@Dimnames[[1]])
     gene_names_replace <- name_conversion_file[,2][match(all_samples[[i]]@assays$RNA@counts@Dimnames[[1]], name_conversion_file[,1])]
@@ -178,6 +201,7 @@ for(i in 1:length(all_samples)){
   all_samples[[i]] <- FindVariableFeatures(all_samples[[i]]) ## https://github.com/satijalab/seurat/issues/2317
 }
 
+## Possibly FindIntegrationFeatures() should go first
 anchors <- FindIntegrationAnchors(object.list = all_samples, dims = 1:60)
 combined_dataset <- IntegrateData(anchorset = anchors, dims = 1:60)
 
@@ -189,7 +213,7 @@ combined_dataset <- FindNeighbors(combined_dataset, reduction = "pca", dims = 1:
 combined_dataset <- FindClusters(combined_dataset, resolution = 4)
 combined_dataset <- RunTSNE(combined_dataset, reduction = "pca", dims = 1:60)
 
-if(input_objs %in% c("LenaCellRanger", "LenaCellRangerrerun")){
+if(input_objs %in% c("LenaCellRanger", "LenaCellRangerrerun", "LenaCellRangerChrimson")){
   combined_dataset$stim <- combined_dataset$orig.ident
 }
 
@@ -199,7 +223,6 @@ combined_dataset$stim
 DefaultAssay(combined_dataset) <- "RNA"
 MARKERS.combined_dataset <- FindAllMarkers(combined_dataset, logfc.threshold = 0.8, assay = "RNA")
 # save(MARKERS.combined_dataset, file = "./FEB2019.MARKERS.allgroups.Robj")
-system(paste0("mkdir -p ~/projects/lighting/data/robjects/", input_objs))
 save(MARKERS.combined_dataset, file = paste0("~/projects/lighting/data/robjects/", input_objs, "/image_Markers.RData"))
 
 
@@ -521,12 +544,14 @@ table(as.vector(FetchData(combined_dataset, 'Chrimson'))[[1]] > 0)
 ## hard threshold of at least one count in Chrimson (i.e. probably many false negatives)
 table(combined_dataset@assays$RNA@counts['Chrimson',] > 0)
 
+FBto0000555
+
 ##---------------------------------------------------------------------------------#
 ## Split by Chrimson
 
 ## if Lena's cellranger, as I forgot to add Chrimson, add Chrimson status from Charly
 
-if(input_objs %in% c('LenaCellRanger', 'LenaCellRangerrerun')){
+if(input_objs %in% c('LenaCellRanger', 'LenaCellRangerrerun')){ ## not LenaCellRangerChrimson
   warning('Using Chrimson classification from Charly')
   charlychrimsonpos <- readRDS("/Users/lenamorrill/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/objects/CharlyCellRanger/Chrimsonposcells.RDS")
   Chrimsonpos <- (dimnames(combined_dataset)[[2]] %in% dimnames(charlychrimsonpos)[[2]])
@@ -881,6 +906,8 @@ if(input_objs == "CharlyCellRanger"){
   falsenegchrimsonclust <- 14
 }else if(input_objs == "LenaCellRanger"){
   falsenegchrimsonclust <- 8
+}else if(input_objs == "LenaCellRangerChrimson"){
+  falsenegchrimsonclust <- sort(sapply(DE_lights_per_cluster$chrimsonneg, function(i) nrow(i[i$p_val_adj <= 0.05,])), decreasing = T)[1]
 }
 C14_chrimsonneg <- subset(Chrimsonnegcells, cells=which(Chrimsonnegcells$seurat_clusters == falsenegchrimsonclust)) 
 ## see if these cells are similar to the chrimson+ cells, i.e. if they belong to the same clusters as the chrimson positive cells
@@ -1390,6 +1417,8 @@ if(input_objs == 'CharlyCellRanger'){
   
 }
 
+paste0("~/projects/lighting/data/robjects/", input_objs,
+system(paste0("rm -r ~/projects/lighting/data/robjects/", input_objs ))
 system(paste0("ls ~/projects/lighting/data/robjects/", input_objs, "/image.RData"))
 save.image(file = paste0("~/projects/lighting/data/robjects/", input_objs, "/image.RData"))
 
