@@ -1,0 +1,43 @@
+
+#@follows("cd %{folder_out_cellranger}s")
+#@follows(mkdir("count"))
+#@transform("data/*/.sample",
+#           regex(r"data/([A-Za-z0-9_]*)/.sample"),
+#           r"count/\1.done")
+#def cellranger_count(infile, outfile):
+#    '''Docstring'''
+#
+#    sample = re.search('data/([A-Za-z0-9_]*)/.sample', infile).group(1)
+#
+#    #fastqs = SAMPLES['fastqs'][sample]
+#    cells = SAMPLES['cells'][sample]
+#    #chemistry = SAMPLES['chemistry'][sample]
+#
+#    #transcriptome = PARAMS["transcriptome"]
+#
+#    datetime = DATETIME
+#
+#    #job_threads = PARAMS["cellranger"]["count"]["threads"]
+#    #job_memory = PARAMS["cellranger"]["count"]["memory"]
+#
+#    #local_memory = int(job_memory.replace("G", "")) * job_threads
+#
+#    statement = """
+#    %(datetime)s > count/%(sample)s.time &&
+#    cellranger count
+#        --id %(sample)s
+#       --sample %{cells}s
+#        --transcriptome %(transcriptome)s
+#        --fastqs %(fastqs)s
+#        --expect-cells %(cells)s
+#        --chemistry %(chemistry)s
+#        --localcores %(job_threads)s
+#        --localmem %(local_memory)s &&
+#        mv %(sample)s count/ &&
+#        touch %(outfile)s &&
+#    %(datetime)s >> count/%(sample)s.time
+#    """
+#
+#    P.run(statement)
+#
+#
