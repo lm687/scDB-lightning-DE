@@ -1,3 +1,4 @@
 3_results_local/ ## results that are stored in my local computer, but that in the cluster you just have to follow the symbolic link to find
-
+1_pipeline/sps-*
+1_pipeline/.snakemake/
 
