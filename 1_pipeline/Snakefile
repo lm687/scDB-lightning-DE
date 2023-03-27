@@ -1,10 +1,13 @@
 import pandas as pd
+import os
+import re
+
 
 ## this the folder where the results from cellranger are going to go
 
 
-#alignment_type = 'cellranger'
-alignment_type = 'kallisto'
+alignment_type = 'cellranger'
+#alignment_type = 'kallisto'
 
 
 if alignment_type == 'cellranger':
@@ -13,6 +16,7 @@ if alignment_type == 'cellranger':
 elif alignment_type == 'kallisto':
         print('Using Kallisto')
         folder_out_alignment="/project/sims-lab/lmorrill/data/lightning/alignment/KallistoOUT/"
+	print('The OUT folder is: ' + folder_out_alignment)
 else:
         print('Specify <alignment_type>')
 
@@ -34,18 +38,49 @@ print(SAMPLES)
 
 ## fixed parameters
 #transcriptome_version = 'dmel649CORRECTED'
-transcriptome_version = 'dmel649Chrimson'
+#transcriptome_version = 'dmel649Chrimson'
+transcriptome_version = 'dmel649ChrimsonV2'
 transcriptome="/project/sims-lab/lmorrill/data/genomes/" + transcriptome_version
 chemistry="SC3Pv3"
 local_memory="100"
 local_cores="24"
 
+
+flder='/project/cncb/shared/proj002/backup/CELLRANGER_OUT/'
 folder_out_alignment = folder_out_alignment + transcriptome_version + '/'
+folder_out_QC = '/project/sims-lab/lmorrill/data/lightning/multiQC/'
+folder_out_fastQC = '/project/sims-lab/lmorrill/data/lightning/fastQC/'
+
+# ------------------------------------------------------------------------------------------------------------------------------------- #
+
+def give_fastq_for_sample(sample_it):
+	append_all = []
+	subfolder=([flder + x for x in SAMPLES[SAMPLES['sample'] == sample_it]['cells'].iloc[0].split(',')])
+	subfolder = [x.strip()+'/' for x in subfolder]
+	for subfolder_it in subfolder:
+		subfiles=([x for x in os.listdir(subfolder_it)])
+		append_all.append([subfolder_it+x for x in subfiles if '_R1_001.fastq.gz' in x][0])             
+		append_all.append([subfolder_it+x for x in subfiles if '_R2_001.fastq.gz' in x][0])
+	return(' '.join(append_all))
+
+
+def flatten(l):
+    return [item for sublist in l for item in sublist]
+
+# ------------------------------------------------------------------------------------------------------------------------------------- #
+
+all_fastq = (flatten([x.split(',') for x in SAMPLES['cells']]))
+exit
+
 
 rule all:
     input:
         #expand(folder_out_alignment+"{sample}/{sample}/outs/filtered_feature_bc_matrix/features.tsv.gz", sample=SAMPLES["sample"]) ## run cellranger
-        expand(folder_out_alignment+"{sample}/", sample=SAMPLES["sample"]) ## run kallisto
+        #expand(folder_out_alignment+"{sample}/counts_unfiltered/cells_x_genes.mtx", sample=SAMPLES["sample"]) ## run kallisto
+        #expand(folder_out_QC+"{name_out}/", name_out=all_fastq)
+        expand(folder_out_fastQC+"{name_out}/", name_out=all_fastq)
+
+
 
 ## The reference has been created as follow, and as specified in <~/projects/general/genomes_kallisto/about >
 # kb ref ../genomes/dmel-all-chromosome-r6.49_Chrimson.fasta ../genomes/dmel-all-r6.49_CORRECTED_Chrimson.gtf -i dmel-all-r6.49_CORRECTED_Chrimson_KallistoINDEX -g dmel-all-r6.49_CORRECTED_Chrimson_KallistoT2G -f1 dmel-all-r6.49_CORRECTED_ChrimsonFASTA
@@ -56,12 +91,11 @@ rule kallisto_alignment:
     log:
         "logs/kallisto_count_{sample}"
     params:
-        cells= lambda wildcards: ' '.join(["/project/cncb/shared/proj002/backup/CELLRANGER_OUT/" + x for x in SAMPLES[SAMPLES['sample'] == wildcards.sample]['cells'].iloc[0].split(',')])
+        cells= lambda wildcards: give_fastq_for_sample(wildcards.sample) #' '.join(["/project/cncb/shared/proj002/backup/CELLRANGER_OUT/" + x for x in SAMPLES[SAMPLES['sample'] == wildcards.sample]['cells'].iloc[0].split(',')])
     output:
-       folder_out_alignment+"{sample}/"
+       folder_out_alignment+"{sample}/counts_unfiltered/cells_x_genes.mtx"
     shell:
-        'kb count -fastqs ' + "{params.cells}  -o {output} -i ~/projects/general/genomes_kallisto/dmel-all-r6.49_CORRECTED_Chrimson_KallistoINDEX -g ~/projects/general/genomes_kallisto/dmel-all-r6.49_CORRECTED_Chrimson_KallistoT2G - x 10XV3"
-
+        'kb count ' + "{params.cells}  -o " + folder_out_alignment + "{wildcards.sample} -i ~/projects/general/genomes_kallisto/dmel-all-r6.49_CORRECTED_Chrimson_KallistoINDEX -g ~/projects/general/genomes_kallisto/dmel-all-r6.49_CORRECTED_Chrimson_KallistoT2G -x 10XV3"
 
 rule cellranger_count:
     input:
@@ -75,4 +109,21 @@ rule cellranger_count:
     shell:
         ## note that any folder which has been created for the output should be deleted first, as otherwise cellranger throws an error
         "cd {folder_out_alignment}/{wildcards.sample}; " + "rm -r " + folder_out_alignment +"{wildcards.sample}/{wildcards.sample}; " + "/project/sims-lab/lmorrill/cellranger/cellranger-7.1.0/bin/cellranger count --id={wildcards.sample} --fastqs=/project/cncb/shared/proj002/backup/CELLRANGER_OUT/ --sample={params.cells} --transcriptome={transcriptome} --chemistry={chemistry} --force-cells=10000 --nosecondary"
+
+rule multiqc:
+    input:
+        flder+"{fastq_name}"
+    output:
+        folder_out_QC + "{fastq_name}/"        
+    shell:
+        'multiqc {input} --outdir ' + folder_out_QC 
+
+
+rule fastqc:
+    input:
+        flder+"{fastq_name}/*"
+    output:
+        folder_out_fastQC + "{fastq_name}/"
+    shell:
+        '/project/sims-lab/lmorrill/software/FastQC/./fastqc --outdir ' + folder_out_fastQC + ' -f {input}'
 

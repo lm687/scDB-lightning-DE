@@ -14,10 +14,11 @@ local <- F
 ## Dataset
 # input_objs <- 'CharlyCellRanger'
 # input_objs <- 'LenaCellRanger'
-input_objs <- 'LenaCellRangerChrimson'
+# input_objs <- 'LenaCellRangerChrimson'
+input_objs <- 'CharlyCellRangerrerun'
 
 ## Whether objects should be reloaded
-reload_objects <- F
+reload_objects <- T
 
 ##--------------------------------------------------------------------------------------------------##
 
@@ -40,7 +41,8 @@ library(ggvenn)
 if(local){
   folder_results <- "~/Documents/projects/lightning/results/3_results/" ## local
 }else{
-  setwd("/t1-data/project/cncb/shared/proj002/analyses/2020/10kCells/")
+  # setwd("/t1-data/project/cncb/shared/proj002/analyses/2020/10kCells/")
+  setwd("/project/cncb/shared/proj002/analyses/2020/10kCells/")
   folder_results <- "~/projects/lighting/3_results/" ## CCB cluster
 }
 
@@ -48,7 +50,7 @@ if(local){
   if(reload_objects){
     if(input_objs == 'LenaCellRanger'){
       load("/Users/lenamorrill/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/objects/LenaCellRanger/image.RData")
-    }else if(input_objs == 'CharlyCellRanger'){
+    }else if(grepl(CharlyCellRanger, input_objs)){
       load("/Users/lenamorrill/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/objects/CharlyCellRanger/image_DEA_Charly.RData")
       load("/Users/lenamorrill/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/objects/CharlyCellRanger/image_DEA_Charly_DE.RData")
       combined_dataset <- FEB2019.combined
@@ -63,6 +65,19 @@ if(local){
   }
   source("~/Documents/projects/lightning/github-repo-lightning-DE/2_analyses/helper_functions.R") ## this has to come after all the loading of files in case outdated versions of the functions have been loaded
 }else{
+  ## CCB cluster
+  if(reload_objects){
+    if(grepl('CharlyCellRanger', input_objs)){
+      load("~/projects/lighting/data/robjects/CharlyCellRanger/image_DEA_Charly.RData")
+      load("~/projects/lighting/data/robjects/CharlyCellRanger/image_DEA_Charly_DE.RData")
+      combined_dataset <- FEB2019.combined
+      # rm(FEB2019.combined)
+      DefaultAssay(combined_dataset ) <- "integrated"
+      # combined_dataset <- FindClusters(combined_dataset, resolution = 0.1)
+      # combined_dataset <- FindClusters(combined_dataset, resolution = 0.01)
+      # DefaultAssay(combined_dataset ) <- "RNA"
+    }
+  }
   source("~/projects/lighting/2_analyses/helper_functions.R")
 }
 
@@ -74,7 +89,7 @@ if(local){
 ## Read in data
 
 
-if(input_objs %in% c('CharlyCellRanger')){
+if(grepl('CharlyCellRanger', input_objs)){
   
   Read10X("./FEB2019_G1_rep1/outs/filtered_feature_bc_matrix") -> FEB2019_G1_rep1.data
   Read10X("./FEB2019_G1_rep2/outs/filtered_feature_bc_matrix") -> FEB2019_G1_rep2.data
@@ -213,7 +228,7 @@ combined_dataset <- FindNeighbors(combined_dataset, reduction = "pca", dims = 1:
 combined_dataset <- FindClusters(combined_dataset, resolution = 4)
 combined_dataset <- RunTSNE(combined_dataset, reduction = "pca", dims = 1:60)
 
-if(input_objs %in% c("LenaCellRanger", "LenaCellRangerrerun", "LenaCellRangerChrimson")){
+if(input_objs %in% c("LenaCellRanger", "LenaCellRangerrerun", "LenaCellRangerChrimson", "CharlyCellRangerrerun")){
   combined_dataset$stim <- combined_dataset$orig.ident
 }
 
@@ -278,7 +293,7 @@ MARKERS_lower_granularity_top1_dcast <- na_to_zeros(firstcol_to_rownames(dcast(M
 MARKERS_lower_granularity_top1[order(MARKERS_lower_granularity_top1$gene),]
 pheatmap::pheatmap(MARKERS_lower_granularity_top1_dcast)
 
-ßif(input_objs =='CharlyCellRanger'){
+if(input_objs == 'CharlyCellRanger'){
 ggplot(MARKERS_lower_granularity_top1, aes(x=as.numeric(cluster), y = factor(gene, levels=rev(gtools::mixedsort(gene))), fill=avg_log2FC))+
   geom_tile()+
   annotate("text", x = length(MARKERS_lower_granularity_top1$cluster)+10, y = 1, label = "Glutamatergic neurons", hjust = 0)+
@@ -321,6 +336,13 @@ annotation_clusters_0p1 <- cbind.data.frame(cluster=MARKERS_lower_granularity_to
     "Serotonergic neurons", "Unknown", "Unknown", "Unknown", "Fat body", "L4 and L5 lamina neurons and or Mi1 medulla neurons",
     "Astrocytes"))
 annotation_clusters_0p1
+
+
+FeaturePlot(combined_dataset, features = c('Vmat', 'Frq1', 'Tdc2', 'Tbh', 'Pvf3', 'kek1', 'vvl', 'ey'),  label=F)
+ggsave(paste0(folder_results, input_objs, "/neurotransmitters_exprs_umap.pdf"), height = 8, width = 8)
+
+FeaturePlot(combined_dataset, features = c('ChAT', 'VAChT', 'Gad1', 'VGAT', 'VGlut'),  label=F)
+ggsave(paste0(folder_results, input_objs, "/neurotransmitters_exprs_umap_2.pdf"), height = 8, width = 6)
 
 
 print(xtable::xtable(cbind.data.frame(annotation=annotation_clusters_0p1$annotation[match(unique(MARKERS_lower_granularity_top1$cluster), 
@@ -380,30 +402,6 @@ pie(rep(1,n), col=sample(col_vector, n))
 col_vector <- sample(colours(), size = 100)
 # col_vector <- readRDS("~/small_practical_robjects/col_vector1.RDS")
 # saveRDS(col_vector, "~/small_practical_robjects/col_vector3.RDS")
-
-umap_single_facet_with_topmarker <- function(seurat_obj, markers, seurat_name_clusters,density_map=F){
-  reduction_df <- data.frame(Reductions(seurat_obj, 'umap')@cell.embeddings)
-  reduction_df$clusters <- seurat_obj[[seurat_name_clusters]][,1]
-  reduction_df$topmarker <- NA
-  reduction_df <- rbind(reduction_df,
-  cbind.data.frame(UMAP_1 = sapply(unique(reduction_df$clusters), function(i) mean(reduction_df$UMAP_1[which(reduction_df$cluster == i)])),
-                   UMAP_2= sapply(unique(reduction_df$clusters), function(i) mean(reduction_df$UMAP_2[which(reduction_df$cluster == i)])),
-                   clusters = unique(reduction_df$clusters),
-                   topmarker = markers$gene[sapply(unique(reduction_df$clusters), function(i) which(markers$cluster == i)[1])])
-  )
-  
-  if(density_map){
-    ggplot(reduction_df, aes(x=UMAP_1, y=UMAP_2, label=topmarker, col=clusters))+geom_density_2d()+theme_bw()+
-      geom_label_repel()+
-      scale_color_manual(values = col_vector)    
-  }else{
-    ## points
-    ggplot(reduction_df, aes(x=UMAP_1, y=UMAP_2, label=topmarker, col=clusters))+geom_point()+theme_bw()+
-      geom_label_repel()+
-      scale_color_manual(values = col_vector)
-  }
-  
-}
 
 umap_single_facet_with_topmarker(seurat_obj = combined_dataset, markers = MARKERS_lowest_granularity, seurat_name_clusters = 'integrated_snn_res.0.01')
 ggsave(paste0(folder_results, input_objs, "/umap_clusters_lowerst_granularity_markers.pdf"), height = 4, width = 4)
@@ -472,7 +470,7 @@ combined_dataset@assays
 
 FeaturePlot(combined_dataset, features = biomarkers_list$`gene name`)
 
-VlnPlot(combined_dataset, features  = biomarkers_list$`gene name`)
+# VlnPlot(combined_dataset, features  = biomarkers_list$`gene name`)
 
 # aggregate(x = as(combined_dataset@assays$RNA@counts['Vmat',], 'vector'), by = lapply(unique( combined_dataset$seurat_clusters), function(i)  combined_dataset$seurat_clusters == i ), FUN='mean')
 Vmat_across_clusters <- aggregate(x = as(combined_dataset@assays$RNA@counts['Vmat',], 'vector'), by = list(clusters=combined_dataset$seurat_clusters), FUN='mean')
@@ -484,7 +482,7 @@ biomarkers_list_vec <- c(biomarkers_list$`gene name`, 'Vmat', 'DAT', 'Frq1', 'ot
 #   aggregate(x = as(combined_dataset@assays$RNA@counts[biomarker_it,], 'vector'), by = list(clusters=combined_dataset$seurat_clusters), FUN='mean')[,2]
 # })
 ## aggregate by median
-## Charlys and my dataset have subtle differences in the gene names
+## Charly's and my dataset have subtle differences in the gene names
 biomarkers_list_vec <- unique(c(biomarkers_list_vec, biomarkers_list$`other name`[!(biomarkers_list_vec %in% rownames(combined_dataset@assays$RNA@counts))]))
 biomarkers_list_vec <- biomarkers_list_vec[(biomarkers_list_vec %in% rownames(combined_dataset@assays$RNA@counts))]
 
@@ -515,14 +513,7 @@ names_samples <- c('FEB2019_G1_rep1',
                    'FEB2019_G3_rep2',
                    'FEB2019_G4_rep1',
                    'FEB2019_G4_rep2')
-dimred_individual <- lapply(c(FEB2019_G1_rep1,
-                                   FEB2019_G1_rep2,
-                                   FEB2019_G2_rep1,
-                                   FEB2019_G2_rep2,
-                                   FEB2019_G3_rep1,
-                                   FEB2019_G3_rep2,
-                                   FEB2019_G4_rep1,
-                                   FEB2019_G4_rep2), add_dimred)
+dimred_individual <- lapply(all_samples, add_dimred)
 names(dimred_individual) <- names_samples
 for(i in names(dimred_individual)){
   FeaturePlot(dimred_individual[[i]], features = "Chrimson")
@@ -544,7 +535,7 @@ table(as.vector(FetchData(combined_dataset, 'Chrimson'))[[1]] > 0)
 ## hard threshold of at least one count in Chrimson (i.e. probably many false negatives)
 table(combined_dataset@assays$RNA@counts['Chrimson',] > 0)
 
-FBto0000555
+## name of Chrimson: FBto0000555
 
 ##---------------------------------------------------------------------------------#
 ## Split by Chrimson
@@ -571,16 +562,18 @@ Chrimsonnegcells <- FindVariableFeatures(Chrimsonnegcells)
 Chrimsonnegcells <- add_dimred(Chrimsonnegcells)
 
 if(!local){
-  saveRDS(Chrimsonposcells, paste0("~/projects/lighting/data/robjects/", input_objs, "/Chrimsonposcells.RDS"))
-  saveRDS(Chrimsonnegcells, paste0("~/projects/lighting/data/robjects/", input_objs, "/Chrimsonnegcells.RDS"))
+  # saveRDS(Chrimsonposcells, paste0("~/projects/lighting/data/robjects/", input_objs, "/Chrimsonposcells.RDS"))
+  # saveRDS(Chrimsonnegcells, paste0("~/projects/lighting/data/robjects/", input_objs, "/Chrimsonnegcells.RDS"))
 }else{
   # saveRDS(Chrimsonposcells, paste0("~/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/objects/", input_objs, "/Chrimsonposcells.RDS"))
   # saveRDS(Chrimsonnegcells, paste0("~/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/objects/", input_objs, "/Chrimsonnegcells.RDS"))
 }
 
 if(!local){
-  # Chrimsonposcells <- readRDS("~/projects/lighting/data/robjects/Chrimsonposcells.RDS")
-  # Chrimsonnegcells <- readRDS("~/projects/lighting/data/robjects/Chrimsonnegcells.RDS")
+  # Chrimsonposcells <- readRDS(paste0("~/projects/lighting/data/robjects/"Chrimsonposcells.RDS"))
+  # Chrimsonnegcells <- readRDS(paste0("~/projects/lighting/data/robjects/Chrimsonnegcells.RDS"))
+  # Chrimsonposcells <- readRDS(paste0("~/projects/lighting/data/robjects/", input_objs, "/Chrimsonposcells.RDS"))
+  # Chrimsonnegcells <- readRDS(paste0("~/projects/lighting/data/robjects/", input_objs, "/Chrimsonnegcells.RDS"))
 }else{
   # ChrimsonposcellsB <- readRDS(paste0("~/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/objects/", input_objs, "/Chrimsonposcells.RDS"))
   # ChrimsonnegcellsB <- readRDS(paste0("~/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/objects/", input_objs, "/Chrimsonnegcells.RDS"))
@@ -672,9 +665,9 @@ Chrimsonposcells@assays$RNA@meta.features
 Chrimsonposcells@meta.data$seurat_clusters_two_groups <- Chrimsonposcells@reductions$umap@cell.embeddings[,1] < -3
 
 UMAPPlot(Chrimsonposcells)
-ggsave(folder_results, input_objs, "/chrimsonpos/chrimsonpos_cluster_umap.png", height = 4, width = 5)
+ggsave(paste0(folder_results, input_objs, "/chrimsonpos/chrimsonpos_cluster_umap.png"), height = 4, width = 5)
 UMAPPlot(Chrimsonposcells, group.by='seurat_clusters_two_groups')
-ggsave(folder_results, input_objs, "/chrimsonpos/chrimsonpos_metacluster_umap.png", height = 4, width = 4)
+ggsave(paste0(folder_results, input_objs, "/chrimsonpos/chrimsonpos_metacluster_umap.png"), height = 4, width = 4)
 
 
 ## DE between these two groups
@@ -688,169 +681,6 @@ ggsave(folder_results, input_objs, "/chrimsonpos/chrimsonpos_metaclustrer_featur
 
 bl <- colorRampPalette(c("navy","royalblue","lightskyblue"))(200)                      
 re <- colorRampPalette(c("mistyrose", "red2","darkred"))(200)
-
-give_DE_analysis_lightON_lightOFF <- function(dataset, dataset_name, name_clusters=NULL, add_name=''){
-  dataset@meta.data$stim_light <- (dataset@meta.data$stim %in% c('G1', 'G3'))
-  dataset@meta.data$stim_light[dataset@meta.data$stim_light] <- 'Lights on'
-  dataset@meta.data$stim_light[dataset@meta.data$stim_light == 'FALSE'] <- 'Lights off'
-  if(!is.null(name_clusters)) dataset$seurat_clusters <- dataset[[name_clusters]][,1]
-  DE_Chrimsonposcells_lights <- Seurat::FoldChange(dataset, ident.1='Lights on', ident.2='Lights off', group.by='stim_light')
-  DE_Chrimsonposcells_lights
-  DE_Chrimsonposcells_lights_topgenes <- give_top_logf_genes(DE_Chrimsonposcells_lights)
-  xtable::xtable(DE_Chrimsonposcells_lights_topgenes)
-  
-  system(paste0("mkdir -p ", folder_results, input_objs, "/", dataset_name, add_name))
-  
-  FeaturePlot(dataset, features = rownames(DE_Chrimsonposcells_lights_topgenes))
-  ggsave(paste0(folder_results, input_objs, "/", dataset_name, add_name, "/", dataset_name, "_lightONvsOFF_featureplot.png"), height = 6, width = 8)
-
-  ## volcano plot  
-  # ggplot(DE_Chrimsonposcells_lights, aes(x=avg_log2FC, y=pct.1))+
-  #   geom_point(alpha=0.01)+lims(x=c(-0.25, 0.25))
-  # EnhancedVolcano::EnhancedVolcano(DE_Chrimsonposcells_lights, x='avg_log2FC', y='pct.1', lab=rownames(DE_Chrimsonposcells_lights))
-  
-  ## DE of specific clusters between conditions
-  ## https://satijalab.org/seurat/archive/v3.0/de_vignette.html
-  
-  # FindMarkers(Chrimsonposcells, ident.1 = "Lights on", ident.2 = "Lights off", group.by = "stim_light")
-  ## we are performing DE between conditions
-  
-  DE_Chrimsonposcells_lights_per_cluster <- give_cluster_specific_DE(dataset,
-                                                                     cluster_name='seurat_clusters',
-                                                                     ident.1='Lights on', ident.2='Lights off', group.by='stim_light')
-  if(local){
-    saveRDS(DE_Chrimsonposcells_lights_per_cluster, paste0("/Users/lenamorrill/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/objects/", input_objs, "/", dataset_name, add_name, "_DEgenes_per_cluster.RDS"))
-    # DE_Chrimsonposcells_lights_per_cluster <- readRDS(paste0("/Users/lenamorrill/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/objects/", input_objs, "/", dataset_name, "_DEgenes_per_cluster.RDS"))
-  }else{
-    saveRDS(DE_Chrimsonposcells_lights_per_cluster, paste0("~/projects/lighting/data/robjects/", input_objs, "/", dataset_name, add_name, "_DEgenes_per_cluster.RDS"))
-  }
-  
-  DE_Chrimsonposcells_lights_per_cluster_topgenes <- lapply(DE_Chrimsonposcells_lights_per_cluster,function(i) i[i$p_val_adj <= 0.05,])
-  DE_Chrimsonposcells_lights_per_cluster_topgenes <- lapply(DE_Chrimsonposcells_lights_per_cluster_topgenes, function(i) data.frame(gene=rownames(i), avg_log2FC=i[,'avg_log2FC']))
-  DE_Chrimsonposcells_lights_per_cluster_topgenes <- melt(DE_Chrimsonposcells_lights_per_cluster_topgenes)
-  table(DE_Chrimsonposcells_lights_per_cluster_topgenes$variable)
-  # print('here')
-  DE_Chrimsonposcells_lights_per_cluster_topgenesdcast <- dcast(DE_Chrimsonposcells_lights_per_cluster_topgenes, L1~gene, value.var = "value")
-  # print('here 2')
-  DE_Chrimsonposcells_lights_per_cluster_topgenesdcast[is.na(DE_Chrimsonposcells_lights_per_cluster_topgenesdcast)] <- 0 ## semi-controversial
-  # print('here 3')
-  
-  DE_Chrimsonposcells_lights_per_cluster_topgenes$gene <- factor(DE_Chrimsonposcells_lights_per_cluster_topgenes$gene, levels=names(sort(table(DE_Chrimsonposcells_lights_per_cluster_topgenes$gene))))
-  ggplot(DE_Chrimsonposcells_lights_per_cluster_topgenes, aes(y=gene, x=L1, fill=value))+
-    scale_fill_gradientn(colours=c(bl,"white", re), na.value = "grey98")+
-    geom_tile()+ggtitle('Differentially expressed genes between lights ON/OFF per cell cluster')+
-    theme_bw()+labs(x='Cluster', y='Gene')
-  ggsave(paste0(folder_results, input_objs, "/", dataset_name, add_name, "/", dataset_name, "_lightONvsOFF_percluster_DEgenes.png"),
-         height = min(length(levels(DE_Chrimsonposcells_lights_per_cluster_topgenes$gene)), 15), width = 8)
-  
-
-  ## to find clustering
-  select_two_or_more_active <- function(i){
-    i[,colSums(i>0) > 2]
-  }
-  
-  try(dev.off())
-  pdf(paste0(folder_results, input_objs, "/", dataset_name, add_name, "/", dataset_name, "_lightONvsOFF_percluster_DEgenes_subsetgenes_cluster.pdf"), height = 3, width = 4)
-  # print(pheatmap::pheatmap(t(as(select_two_or_more_active(DE_Chrimsonposcells_lights_per_cluster_topgenesdcast[,-1]), 'matrix'))))
-  print(pheatmap::pheatmap(t(as((DE_Chrimsonposcells_lights_per_cluster_topgenesdcast[,-1]), 'matrix'))))
-  dev.off()
-  # print('here 4')
-  
-  try(dev.off())
-  pdf(paste0(folder_results, input_objs, "/", dataset_name, add_name, "/", dataset_name, "_lightONvsOFF_percluster_DEgenes_subsetgenes_cluster_large.pdf"),
-      height = min(length(levels(DE_Chrimsonposcells_lights_per_cluster_topgenes$gene)), 15), width = 8)
-  # print(pheatmap::pheatmap(t(as(select_two_or_more_active(DE_Chrimsonposcells_lights_per_cluster_topgenesdcast[,-1]), 'matrix'))))
-  print(pheatmap::pheatmap(t(as((DE_Chrimsonposcells_lights_per_cluster_topgenesdcast[,-1]), 'matrix'))))
-  dev.off()
-  # print('here 4')
-  
-  ## selecting only the 10 genes which are DE in the most cells
-  try(dev.off())
-  pdf(paste0(folder_results, input_objs, "/", dataset_name, add_name, "/", dataset_name, "_lightONvsOFF_percluster_DEgenes_subsetgenes_cluster_topgenes.pdf"),
-      height = 4, width = 5)
-  print(pheatmap::pheatmap(t(as((DE_Chrimsonposcells_lights_per_cluster_topgenesdcast[,-1][,order(apply(DE_Chrimsonposcells_lights_per_cluster_topgenesdcast[,-1], 2, function(i) sum(i > 0)), decreasing = T)[1:min(10, ncol(DE_Chrimsonposcells_lights_per_cluster_topgenesdcast)-1)]]), 'matrix'))))
-  dev.off()
-  
-  # print('here 5')
-  DE_Chrimsonposcells_lights_per_cluster_topgenes_subset_genes <- DE_Chrimsonposcells_lights_per_cluster_topgenes[DE_Chrimsonposcells_lights_per_cluster_topgenes$gene %in% names(which(table(DE_Chrimsonposcells_lights_per_cluster_topgenes$gene) > 2)),]
-  DE_Chrimsonposcells_lights_per_cluster_topgenes_subset_genes$gene <- factor(DE_Chrimsonposcells_lights_per_cluster_topgenes_subset_genes$gene, levels=names(which(table(DE_Chrimsonposcells_lights_per_cluster_topgenes_subset_genes$gene) > 0)))
-  table(DE_Chrimsonposcells_lights_per_cluster_topgenes$variable)
-
-  # ggplot(DE_Chrimsonposcells_lights_per_cluster_topgenes %>% dplyr::filter(gene %in% c('sr', 'Hr38', 'CG14186', 'cbt', 'CG46385')), aes(y=gene, x=value))+geom_ridgeline()
-  ggplot(DE_Chrimsonposcells_lights_per_cluster_topgenes, aes(y=gene, x=value))+geom_density_ridges()
-  ggsave(paste0(folder_results, input_objs, "/", dataset_name, add_name, "/", dataset_name, "_lightONvsOFF_percluster_DEgenes_subsetgenes_logfoldchange.pdf"), height = 3, width = 4)
-  ggplot(DE_Chrimsonposcells_lights_per_cluster_topgenes_subset_genes,
-         aes(y=gene, x=value))+geom_density_ridges()+
-    geom_label(data = melt(table(DE_Chrimsonposcells_lights_per_cluster_topgenes_subset_genes$gene)),
-               aes(x=max(DE_Chrimsonposcells_lights_per_cluster_topgenes$value)-.5, y=Var1, label=paste0('n=',value)), hjust = 0,
-               label.size = 0)
-  ggsave(paste0(folder_results, input_objs, "/", dataset_name, add_name, "/", dataset_name, "_lightONvsOFF_percluster_DEgenes_subsetgenes_logfoldchange_2.pdf"), height = 3, width = 4)
-  
-  ggplot(DE_Chrimsonposcells_lights_per_cluster_topgenes_subset_genes,
-         aes(y=gene, x=value))+geom_density_ridges()+
-    geom_vline(xintercept = 0, lty='dashed', col='red')+
-    geom_label(data = melt(table(DE_Chrimsonposcells_lights_per_cluster_topgenes_subset_genes$gene)),
-               aes(x=max(DE_Chrimsonposcells_lights_per_cluster_topgenes$value)-.5, y=Var1, label=paste0('n=',value)), hjust = 0,
-               label.size = 0) #fill = NA
-  ggsave(paste0(folder_results, input_objs, "/", dataset_name, add_name, "/", dataset_name, "_lightONvsOFF_percluster_DEgenes_subsetgenes_logfoldchange_2_large.pdf"),
-         height = min(0.7*length(levels(DE_Chrimsonposcells_lights_per_cluster_topgenes$gene)), 6), width = 4)
-
-  ## summary of most important genes across clusters
-  ggplot(DE_Chrimsonposcells_lights_per_cluster_topgenes[DE_Chrimsonposcells_lights_per_cluster_topgenes$gene %in% tail(levels(DE_Chrimsonposcells_lights_per_cluster_topgenes$gene), n=10),], aes(y=gene, x=L1, fill=value))+
-  # ggplot(DE_Chrimsonposcells_lights_per_cluster_topgenes, aes(y=gene, x=L1, fill=value))+
-    scale_fill_gradientn(colours=c(bl,"white", re))+
-    geom_tile()+ggtitle('Differentially expressed genes between lights ON/OFF per cell cluster\n(most shared genes)')+
-    theme_bw()+labs(x='Cluster', y='Gene')+
-    theme(axis.text.x = element_text(angle = 30, hjust=1))
-  ggsave(paste0(folder_results, input_objs, "/", dataset_name, add_name, "/", dataset_name, "_lightONvsOFF_percluster_DEgenes_subsetgenestop10.png"), height = 4, width = 8)
-  
-  # splitUMAPPlot(Chrimsonposcells, group.by='stim')
-  # splitUMAPPlot(Chrimsonposcells, group.by='stim_light')
-  
-
-  ## num of DE genes per cluster
-  dataset$num_light_DE_genes = table(DE_Chrimsonposcells_lights_per_cluster_topgenes$L1)[match(dataset$seurat_clusters, names(table(DE_Chrimsonposcells_lights_per_cluster_topgenes$L1)))]
-  dataset$num_light_DE_genes_any_bool <- !is.na(dataset$num_light_DE_genes)
-  dataset$num_light_DE_geneslogp1 <- log(dataset$num_light_DE_genes+1)
-  table(dataset$num_light_DE_genes_any_bool)
-  
-
-  ## UMAP of lights on/off coloured by feature
-  splitUMAPPlot(dataset, group.by='stim_light', colour_by_feature='sr')
-  ggsave(paste0(folder_results, input_objs, "/", dataset_name, add_name, "/", dataset_name, "_lightONvsOFF_sr.png"), height = 2.2, width = 4)
-  splitUMAPPlot(dataset, group.by='stim_light', colour_by_feature='Hr38')
-  ggsave(paste0(folder_results, input_objs, "/", dataset_name, add_name, "/", dataset_name, "_lightONvsOFF_Hr38.png"), height = 2.2, width = 4)
-  splitUMAPPlot(dataset, group.by='stim_light', colour_by_feature='Hr38', dim_red = "tsne")
-  ggsave(paste0(folder_results, input_objs, "/", dataset_name, add_name, "/", dataset_name, "_lightONvsOFF_Hr38_TSNE.png"), height = 2.2, width = 4)
-  splitUMAPPlot(dataset, group.by='stim_light', colour_by_feature='sr', dim_red = "tsne")
-  ggsave(paste0(folder_results, input_objs, "/", dataset_name, add_name, "/", dataset_name, "_lightONvsOFF_sr_TSNE.png"), height = 2.2, width = 4)
-  
-  
-  ## percentages of genes which are DE, in each cluster, including all cells, or separating by Chrimson cells
-  dataset$num_light_DE_genes[is.na(dataset$num_light_DE_genes)] <- 0
-  FeaturePlot(dataset, feature='num_light_DE_genes')+ggtitle('Number of DE genes')
-  ggsave(paste0(folder_results, input_objs, "/", dataset_name, add_name, "/", dataset_name, "_lightONvsOFF_numDE_UMAP.png"), height = 2.8, width = 4)
-  FeaturePlot(dataset, feature='num_light_DE_geneslogp1')+ggtitle('Number of DE genes')
-  ggsave(paste0(folder_results, input_objs, "/", dataset_name, add_name, "/", dataset_name, "_lightONvsOFF_numDElogp1_UMAP.png"), height = 2.8, width = 4)
-  FeaturePlot(dataset, feature='num_light_DE_genes_any_bool')+ggtitle('Presence of DE genes')
-  ggsave(paste0(folder_results, input_objs, "/", dataset_name, add_name, "/", dataset_name, "_lightONvsOFF_anyDE_UMAP.png"), height = 2.8, width = 4)
-  
-  # FeaturePlot(Chrimsonposcells, feature='num_light_DE_genes', reduction = 'pca')+ggtitle('Number of DE genes')
-  # FeaturePlot(Chrimsonposcells, feature='num_light_DE_genes', reduction = 'tsne')+ggtitle('Number of DE genes')
-  
-  ## is there a power issue?
-  num_DE_genes_cluster = cbind.data.frame(num_DE_genes=as.vector(table(factor(DE_Chrimsonposcells_lights_per_cluster_topgenes$L1, levels=sort(unique(dataset$seurat_clusters))))),
-                              cluster_size=as.vector(table(factor(dataset$seurat_clusters, levels=sort(unique(dataset$seurat_clusters))))),
-                              cluster=sort(unique(dataset$seurat_clusters)))
-  num_DE_genes_cluster
-  
-  ggplot(num_DE_genes_cluster, aes(x=cluster_size, y=num_DE_genes))+
-    geom_point()+geom_smooth(method = "lm")+theme_bw()+labs(x='Size of cluster', y='Number of DE genes in cluster')
-  ggsave(paste0(folder_results, input_objs, "/", dataset_name, add_name, "/", dataset_name, "_cor_numDEgenes_clustersize.png"), height = 3, width = 3)
-
-  # print('here 5')
-  
-}
 
 give_DE_analysis_lightON_lightOFF(Chrimsonposcells, 'chrimsonpos')
 give_DE_analysis_lightON_lightOFF(dataset = Chrimsonnegcells, dataset_name = 'chrimsonneg')
@@ -874,19 +704,9 @@ give_DE_analysis_lightON_lightOFF(dataset = combined_dataset, dataset_name = 'al
 give_DE_analysis_lightON_lightOFF(dataset = Chrimsonposcells, dataset_name = 'chrimsonpos', add_name='_res0p1', name_clusters='integrated_snn_res.0.1')
 give_DE_analysis_lightON_lightOFF(dataset = Chrimsonposcells, dataset_name = 'chrimsonpos', add_name='_res0p01', name_clusters='integrated_snn_res.0.01')
 # dataset = Chrimsonposcells; dataset_name = 'chrimsonpos'; add_name='_res0p01'; name_clusters='integrated_snn_res.0.01'
+give_DE_analysis_lightON_lightOFF(dataset = Chrimsonnegcells, dataset_name = 'chrimsonneg', add_name='', name_clusters='integrated_snn_res.4')
 give_DE_analysis_lightON_lightOFF(dataset = Chrimsonnegcells, dataset_name = 'chrimsonneg', add_name='_res0p1', name_clusters='integrated_snn_res.0.1')
 give_DE_analysis_lightON_lightOFF(dataset = Chrimsonnegcells, dataset_name = 'chrimsonneg', add_name='_res0p01', name_clusters='integrated_snn_res.0.01')
-
-names_datasets_DE <- c('chrimsonpos', 'chrimsonneg', 'allcells', 'chrimsonneg-noC14')
-DE_lights_per_cluster <- lapply(names_datasets_DE, function(i){
-  if(local){
-    x <- readRDS(paste0("/Users/lenamorrill/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/objects/", input_objs, "/", i, "_DEgenes_per_cluster.RDS"))
-  }else{
-    x <- readRDS(paste0("~/projects/lighting/data/robjects/", input_objs, "/", i, "_DEgenes_per_cluster.RDS"))
-  }
-  add_genenames(x)
-})
-names(DE_lights_per_cluster) <- names_datasets_DE
 
 
 DefaultAssay(Chrimsonposcells) <- "integrated"
@@ -899,15 +719,31 @@ UMAPPlot(Chrimsonposcells, group.by='integrated_snn_res.0.01')
 
 ## cluster names are dataset and run-specific. make sure that the cluster number is reproducible
 
+# names_datasets_DE <- c('chrimsonpos', 'chrimsonneg', 'allcells', 'chrimsonneg-noC14')
+names_datasets_DE <- c('chrimsonpos', 'chrimsonneg', 'allcells')
+DE_lights_per_cluster <- lapply(names_datasets_DE, function(i){
+  cat(i, '\n')
+  if(local){
+    x <- readRDS(paste0("/Users/lenamorrill/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/objects/", input_objs, "/", i, "_DEgenes_per_cluster.RDS"))
+  }else{
+    fle <- paste0("~/projects/lighting/data/robjects/", input_objs, "/", i, "_DEgenes_per_cluster.RDS")
+    cat(fle, '\n')
+    x <- readRDS(fle)
+  }
+  add_genenames(x)
+})
+names(DE_lights_per_cluster) <- names_datasets_DE
+
 ## there is one cluster in the chrimson- dataset which contains many differentially-expressed genes:
 sort(sapply(DE_lights_per_cluster$chrimsonneg, function(i) nrow(i[i$p_val_adj <= 0.05,])))
+Chrimsonnegcells$seurat_clusters <- Chrimsonnegcells$integrated_snn_res.4
 # Chrimsonnegcells[Chrimsonnegcells$integrated_snn_res.4 == 14,]
 if(input_objs == "CharlyCellRanger"){
   falsenegchrimsonclust <- 14
 }else if(input_objs == "LenaCellRanger"){
   falsenegchrimsonclust <- 8
-}else if(input_objs == "LenaCellRangerChrimson"){
-  falsenegchrimsonclust <- sort(sapply(DE_lights_per_cluster$chrimsonneg, function(i) nrow(i[i$p_val_adj <= 0.05,])), decreasing = T)[1]
+}else{ #if(input_objs == "LenaCellRangerChrimson"){
+  falsenegchrimsonclust <- names(sort(sapply(DE_lights_per_cluster$chrimsonneg, function(i) nrow(i[i$p_val_adj <= 0.05,])), decreasing = T)[1])
 }
 C14_chrimsonneg <- subset(Chrimsonnegcells, cells=which(Chrimsonnegcells$seurat_clusters == falsenegchrimsonclust)) 
 ## see if these cells are similar to the chrimson+ cells, i.e. if they belong to the same clusters as the chrimson positive cells
@@ -1098,14 +934,12 @@ FeaturePlot(combined_dataset, feature='chrimsonposfraccluster')+ggtitle('Fractio
 ggsave(paste0(folder_results, input_objs, "/umap_fraction_chrimson.pdf"), height = 4, width = 4.5)
 FeaturePlot(combined_dataset, feature='DAT')+ggtitle('Expression of DAT') ## nothing to do with Chrimson+ cells
 ggsave(paste0(folder_results, input_objs, "/umap_DAT.pdf"), height = 4, width = 4.5)
-FeaturePlot(combined_dataset, feature='chrimsonpos')+ggtitle('Expression of Chrimson (bool)') ## nothing to do with Chrimson+ cells
-FeaturePlot(combined_dataset, feature='chrimsonposfraccluster')+ggtitle('Expression of Chrimson (bool)') ## nothing to do with Chrimson+ cells
 
 cowplot::plot_grid(FeaturePlot(combined_dataset, feature='chrimsonpos')+ggtitle('Expression of Chrimson (bool)'), ## nothing to do with Chrimson+ cells
                    FeaturePlot(combined_dataset, feature='chrimsonposfraccluster')+ggtitle('Expression of Chrimson (fraction in cluster)')) ## nothing to do with Chrimson+ cells)
 
 plot(combined_dataset$chrimsonpos,
-combined_dataset$chrimsonposfraccluster) ### did I 
+combined_dataset$chrimsonposfraccluster)
 
 ## from which cluster are Chrimson+ cells? almost all of cluster 5 contains Chrimson+ cells, but most Chrimson+ cells belong to cluster 0, which is a large cluster
 normalise_cl(table(combined_dataset$integrated_snn_res.0.01, combined_dataset$chrimsonpos))
@@ -1154,6 +988,15 @@ combined_dataset$FC_Hr38 <- (DE_lights_per_cluster_molten_top_common %>%
       as.numeric((DE_lights_per_cluster_molten_top_common %>%
                     dplyr::filter((gene == 'Hr38' ) & (L1 == 'All cells') ))[,'L2']))]
 FeaturePlot(combined_dataset, features = 'FC_Hr38')
+ggsave(paste0(folder_results, input_objs, "/Hr38_LFC_UMAP.png"), height = 4, width = 4.5)
+
+combined_dataset$FC_sr <- (DE_lights_per_cluster_molten_top_common %>%
+                               dplyr::filter((gene == 'sr' ) & (L1 == 'All cells')))[,'avg_log2FC'][match(as.numeric(combined_dataset$integrated_snn_res.4),
+                                                                                                            as.numeric((DE_lights_per_cluster_molten_top_common %>%
+                                                                                                                          dplyr::filter((gene == 'sr' ) & (L1 == 'All cells') ))[,'L2']))]
+FeaturePlot(combined_dataset, features = 'FC_sr')
+ggsave(paste0(folder_results, input_objs, "/sr_LFC_UMAP.png"), height = 4, width = 4.5)
+
 
 # save.image(file = "~/projects/lighting/data/robjects/image_DEA_Charly_DE.RData")
 # load(file = "~/projects/lighting/data/robjects/image_DEA_Charly_DE.RData")
@@ -1180,7 +1023,7 @@ ggvenn(data = rename_list(unique_genes_DE, c('C+', 'C-', 'All', 'C- no C14')),
        )
 dev.off()
 
-sapply(unique_genes_DE, length)
+ sapply(unique_genes_DE, length)
 
 ## check the granularity of the clustering used in each group
 DE_lights_per_cluster_molten %>% dplyr::filter(L1 == 'chrimsonneg') %>%
@@ -1198,11 +1041,17 @@ DE_lights_per_cluster_molten %>% dplyr::filter(L1 == 'allcells') %>%
 length(levels(combined_dataset$seurat_clusters))
 length(levels(combined_dataset$integrated_snn_res.4)) ## this resolution
 
-
-DE_lights_per_cluster_chrimsonpos <- list(add_genenames(readRDS(paste0("/Users/lenamorrill/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/objects/", input_objs, "/", 'chrimsonpos', "_DEgenes_per_cluster.RDS"))),
-                                          add_genenames(readRDS(paste0("/Users/lenamorrill/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/objects/", input_objs, "/", 'chrimsonpos_res0p1', "_DEgenes_per_cluster.RDS"))),
-                                          add_genenames(readRDS(paste0("/Users/lenamorrill/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/objects/", input_objs, "/", 'chrimsonpos_res0p01', "_DEgenes_per_cluster.RDS")))
-)
+if(local){
+  DE_lights_per_cluster_chrimsonpos <- list(add_genenames(readRDS(paste0("/Users/lenamorrill/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/objects/", input_objs, "/", 'chrimsonpos', "_DEgenes_per_cluster.RDS"))),
+                                            add_genenames(readRDS(paste0("/Users/lenamorrill/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/objects/", input_objs, "/", 'chrimsonpos_res0p1', "_DEgenes_per_cluster.RDS"))),
+                                            add_genenames(readRDS(paste0("/Users/lenamorrill/Documents/projects/lightning/github-repo-lightning-DE/3_results_local/objects/", input_objs, "/", 'chrimsonpos_res0p01', "_DEgenes_per_cluster.RDS")))
+  )
+}else{
+  DE_lights_per_cluster_chrimsonpos <- list(add_genenames(readRDS(paste0("~/projects/lighting/data/robjects/", input_objs, "/", 'chrimsonpos', "_DEgenes_per_cluster.RDS"))),
+                                            add_genenames(readRDS(paste0("~/projects/lighting/data/robjects/", input_objs, "/", 'chrimsonpos_res0p1', "_DEgenes_per_cluster.RDS"))),
+                                            add_genenames(readRDS(paste0("~/projects/lighting/data/robjects/", input_objs, "/", 'chrimsonpos_res0p01', "_DEgenes_per_cluster.RDS")))
+  )
+}
 sapply(DE_lights_per_cluster_chrimsonpos, function(j) sum(sapply(j, function(i) sum(i$p_val_adj <= 0.05) == 0)))
 DE_lights_per_cluster_chrimsonpos <- lapply(DE_lights_per_cluster_chrimsonpos, function(i) reshape2::melt(i, id.vars=c('gene', 'p_val', 'avg_log2FC', 'pct.1', 'pct.2', 'p_val_adj')))
 DE_lights_per_cluster_chrimsonpos <- lapply(DE_lights_per_cluster_chrimsonpos, function(i) i[i$p_val_adj <= 0.05,])
@@ -1271,13 +1120,13 @@ DE_lights_per_cluster_molten_dcast_DEG_averaged <- t(outer(unique(DE_lights_per_
                                                DE_lights_per_cluster_molten_dcast_DEG_cutreecl == j]
         )
       })))
-pheatmap(DE_lights_per_cluster_molten_dcast_DEG_averaged)
+pheatmap::pheatmap(DE_lights_per_cluster_molten_dcast_DEG_averaged)
 
 sort_abundance <- function(i){
   i[order(rowSums(i), decreasing = T),order(colSums(i), decreasing = T)]
 }
-pheatmap(sort_abundance(DE_lights_per_cluster_molten_dcast_DEG_averaged), cluster_cols = F, cluster_rows = F)
-pheatmap(sort_abundance(round(DE_lights_per_cluster_molten_dcast_DEG_averaged)), cluster_cols = F, cluster_rows = F)
+pheatmap::pheatmap(sort_abundance(DE_lights_per_cluster_molten_dcast_DEG_averaged), cluster_cols = F, cluster_rows = F)
+pheatmap::pheatmap(sort_abundance(round(DE_lights_per_cluster_molten_dcast_DEG_averaged)), cluster_cols = F, cluster_rows = F)
 
 library(biclust)
 DE_lights_per_cluster_molten_dcast_DEG_biclust <- biclust::biclust(DE_lights_per_cluster_molten_dcast_DEG,
@@ -1291,10 +1140,13 @@ res1
 ## sort the matrix
 DE_lights_per_cluster_molten_dcast_DEG <- DE_lights_per_cluster_molten_dcast_DEG[,order(colSums(DE_lights_per_cluster_molten_dcast_DEG))]
 DE_lights_per_cluster_molten_dcast_DEG <- DE_lights_per_cluster_molten_dcast_DEG[order(rowSums(DE_lights_per_cluster_molten_dcast_DEG)),]
+try(dev.off())
+png(paste0(folder_results, input_objs, "/pheatmap_DEGs_sort1.png"), height = 6, width = 6.5, res = 300, units = 'in')
 pheatmap::pheatmap(DE_lights_per_cluster_molten_dcast_DEG, show_rownames = F, show_colnames = F,
                    labels_row = 'Genes', labels_col = 'Clusters',
                    annotation_col = DE_lights_per_cluster_molten_dcast_DEG_annotationcol,
                    cluster_cols = F)
+dev.off()
 DE_lights_per_cluster_molten_dcast_DEG_ph2 <- pheatmap::pheatmap(DE_lights_per_cluster_molten_dcast_DEG, show_rownames = F, show_colnames = F,
                                                                 labels_row = 'Genes', labels_col = 'Clusters',
                                                                 annotation_col = DE_lights_per_cluster_molten_dcast_DEG_annotationcol,
@@ -1306,7 +1158,7 @@ dev.off()
 # add_list_name_column(lapply(DE_lights_per_cluster, function(j) do.call('rbind', lapply(j, add_list_name_column))))
 
 ## infer network with NEMs
-library(nem)
+# library(nem)
 DE_lights_per_cluster_molten_dcast_DEG
 
 pheatmap::pheatmap(DE_lights_per_cluster_molten_dcast_DEG_LFC, show_rownames = F, show_colnames = F,
@@ -1417,8 +1269,70 @@ if(input_objs == 'CharlyCellRanger'){
   
 }
 
-paste0("~/projects/lighting/data/robjects/", input_objs,
-system(paste0("rm -r ~/projects/lighting/data/robjects/", input_objs ))
+## are there false positive chrimson cells?
+noDE_chrimsonpos <- sapply(DE_lights_per_cluster$chrimsonpos, function(i) nrow(i[i$p_val_adj <= 0.05,]))
+
+## do these cells have fewer Chrimson reads?
+stopifnot(length(noDE_chrimsonpos) == length(table(Chrimsonposcells$seurat_clusters))){
+  chrimsonpos_false_positives <- split(as.vector(Chrimsonposcells['Chrimson',]@assays$RNA@counts),
+                                       Chrimsonposcells$seurat_clusters)
+  chrimsonpos_false_positives <- cbind.data.frame(cluster=unlist(names(chrimsonpos_false_positives)),
+                                                  Chrimson_reads=sapply(chrimsonpos_false_positives, mean),
+                                                  numDE=unlist(noDE_chrimsonpos[names(chrimsonpos_false_positives)])
+                                                  )
+  ggplot(chrimsonpos_false_positives, aes(x=Chrimson_reads, y=numDE, label=cluster))+
+    geom_point()+geom_label_repel()
+  ggsave(paste0(folder_results, input_objs, "/chrimsonpos/chrimsonpos_chrimsonreads_numDE.pdf"), height = 3.5, width = 3.5)
+  
+}
+noDE_chrimsonpos
+
+DE_lights_per_cluster$chrimsonneg
+
+give_dcast_logFC <- function(DE_Chrimsonposcells_lights_per_cluster){
+  DE_Chrimsonposcells_lights_per_cluster_topgenes <- lapply(DE_Chrimsonposcells_lights_per_cluster,function(i) i[i$p_val_adj <= 0.05,])
+  DE_Chrimsonposcells_lights_per_cluster_topgenes <- lapply(DE_Chrimsonposcells_lights_per_cluster_topgenes, function(i) data.frame(gene=rownames(i), avg_log2FC=i[,'avg_log2FC']))
+  DE_Chrimsonposcells_lights_per_cluster_topgenes <- melt(DE_Chrimsonposcells_lights_per_cluster_topgenes)
+  table(DE_Chrimsonposcells_lights_per_cluster_topgenes$variable)
+  DE_Chrimsonposcells_lights_per_cluster_topgenesdcast <- dcast(DE_Chrimsonposcells_lights_per_cluster_topgenes, L1~gene, value.var = "value")
+  DE_Chrimsonposcells_lights_per_cluster_topgenesdcast[is.na(DE_Chrimsonposcells_lights_per_cluster_topgenesdcast)] <- 0 ## semi-controversial
+  return(DE_Chrimsonposcells_lights_per_cluster_topgenesdcast)
+}
+
+DE_lights_per_clusterchrimsonneg_dcast <- give_dcast_logFC(DE_lights_per_cluster$chrimsonneg)
+DE_lights_per_clusterchrimsonneg_dcast_top <- t(as((DE_lights_per_clusterchrimsonneg_dcast[,-1][,order(apply(DE_lights_per_clusterchrimsonneg_dcast[,-1], 2, function(i) sum(i > 0)), decreasing = T)[1:min(10, ncol(DE_lights_per_clusterchrimsonneg_dcast)-1)]]), 'matrix'))
+print(pheatmap::pheatmap(DE_lights_per_clusterchrimsonneg_dcast_top))
+## there is a cluster that looks strange: high sRNA and low lncRNA
+
+stopifnot(length(levels(Chrimsonnegcells$seurat_clusters)) == length(DE_lights_per_cluster$chrimsonneg))
+(table(Chrimsonnegcells$seurat_clusters))[names(DE_lights_per_cluster$chrimsonneg[which.min(DE_lights_per_clusterchrimsonneg_dcast_top['lncRNA:CR34335',])])]/sum((table(Chrimsonnegcells$seurat_clusters)))
+
+give_numDE_umap <- function(DE_Chrimsonposcells_lights_per_cluster, dataset, plot_cluster_of_interest=F){
+  DE_Chrimsonposcells_lights_per_cluster_topgenes <- lapply(DE_Chrimsonposcells_lights_per_cluster,function(i) i[i$p_val_adj <= 0.05,])
+  DE_Chrimsonposcells_lights_per_cluster_topgenes <- lapply(DE_Chrimsonposcells_lights_per_cluster_topgenes, function(i) data.frame(gene=rownames(i), avg_log2FC=i[,'avg_log2FC']))
+  DE_Chrimsonposcells_lights_per_cluster_topgenes <- melt(DE_Chrimsonposcells_lights_per_cluster_topgenes)
+  
+  if(plot_cluster_of_interest){
+    dataset$num_light_DE_genes = (dataset$seurat_clusters == '14')
+    dataset$num_light_DE_genes[is.na(dataset$num_light_DE_genes)] <- FALSE
+    FeaturePlot(dataset, feature='num_light_DE_genes')+ggtitle('Cluster of interest')
+  }else{
+    ## plot num DE
+    dataset$num_light_DE_genes = table(DE_Chrimsonposcells_lights_per_cluster_topgenes$L1)[match(dataset$seurat_clusters, names(table(DE_Chrimsonposcells_lights_per_cluster_topgenes$L1)))]
+    dataset$num_light_DE_genes[is.na(dataset$num_light_DE_genes)] <- 0
+    FeaturePlot(dataset, feature='num_light_DE_genes')+ggtitle('Number of DE genes')
+    # splitUMAPPlot(dataset, group.by = 'num_light_DE_genes')
+  }
+  # ggsave(paste0(folder_results, input_objs, "/", dataset_name, add_name, "/", dataset_name, "_lightONvsOFF_numDE_UMAP.png"), height = 2.8, width = 4)
+}
+# give_numDE_umap(DE_lights_per_cluster$chrimsonpos, Chrimsonposcells)
+give_numDE_umap(DE_lights_per_cluster$chrimsonneg, Chrimsonnegcells)
+give_numDE_umap(DE_lights_per_cluster$chrimsonneg, Chrimsonnegcells, plot_cluster_of_interest = T)
+UMAPPlot(Chrimsonnegcells)
+FeaturePlot(Chrimsonnegcells, features = 'Chrimson')
+
+##-------------------------------------------------------------------------------------------------------------------------##
+
 system(paste0("ls ~/projects/lighting/data/robjects/", input_objs, "/image.RData"))
 save.image(file = paste0("~/projects/lighting/data/robjects/", input_objs, "/image.RData"))
 

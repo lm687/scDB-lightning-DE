@@ -1,0 +1,40 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cluster nodes: 8
+Job stats:
+job           count    min threads    max threads
+----------  -------  -------------  -------------
+all               1              1              1
+run_script        2              1              1
+total             3              1              1
+
+Select jobs to execute...
+
+[Thu Mar 23 12:43:43 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/15.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC15
+    jobid: 2
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/15.RDS
+    wildcards: nPC=15
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+RScript compute_clusters_PCs_resolution.R --nPCs 15
+Submitted job 2 with external jobid 'Submitted batch job 5047631'.
+
+[Thu Mar 23 12:43:43 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/10.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC10
+    jobid: 1
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/10.RDS
+    wildcards: nPC=10
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+RScript compute_clusters_PCs_resolution.R --nPCs 10
+Submitted job 1 with external jobid 'Submitted batch job 5047632'.
+Terminating processes on user request, this might take some time.
+No --cluster-cancel given. Will exit after finishing currently running jobs.
+Cancelling snakemake on user request.

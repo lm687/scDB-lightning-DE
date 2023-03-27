@@ -1,0 +1,514 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cluster nodes: 20
+Job stats:
+job           count    min threads    max threads
+----------  -------  -------------  -------------
+all               1              1              1
+run_script       30              1              1
+total            31              1              1
+
+Select jobs to execute...
+
+[Thu Mar 23 13:26:29 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/38.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC38
+    jobid: 29
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/38.RDS
+    wildcards: nPC=38
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 38
+Submitted job 29 with external jobid 'Submitted batch job 5048033'.
+
+[Thu Mar 23 13:26:29 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/24.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC24
+    jobid: 15
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/24.RDS
+    wildcards: nPC=24
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 24
+Submitted job 15 with external jobid 'Submitted batch job 5048034'.
+
+[Thu Mar 23 13:26:29 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/15.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC15
+    jobid: 6
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/15.RDS
+    wildcards: nPC=15
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 15
+Submitted job 6 with external jobid 'Submitted batch job 5048035'.
+
+[Thu Mar 23 13:26:29 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/11.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC11
+    jobid: 2
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/11.RDS
+    wildcards: nPC=11
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 11
+Submitted job 2 with external jobid 'Submitted batch job 5048036'.
+
+[Thu Mar 23 13:26:29 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/39.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC39
+    jobid: 30
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/39.RDS
+    wildcards: nPC=39
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 39
+Submitted job 30 with external jobid 'Submitted batch job 5048037'.
+
+[Thu Mar 23 13:26:29 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/32.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC32
+    jobid: 23
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/32.RDS
+    wildcards: nPC=32
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 32
+Submitted job 23 with external jobid 'Submitted batch job 5048038'.
+
+[Thu Mar 23 13:26:29 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/25.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC25
+    jobid: 16
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/25.RDS
+    wildcards: nPC=25
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 25
+Submitted job 16 with external jobid 'Submitted batch job 5048039'.
+
+[Thu Mar 23 13:26:29 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/16.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC16
+    jobid: 7
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/16.RDS
+    wildcards: nPC=16
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 16
+Submitted job 7 with external jobid 'Submitted batch job 5048040'.
+
+[Thu Mar 23 13:26:29 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/12.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC12
+    jobid: 3
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/12.RDS
+    wildcards: nPC=12
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 12
+Submitted job 3 with external jobid 'Submitted batch job 5048041'.
+
+[Thu Mar 23 13:26:29 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/28.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC28
+    jobid: 19
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/28.RDS
+    wildcards: nPC=28
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 28
+Submitted job 19 with external jobid 'Submitted batch job 5048042'.
+
+[Thu Mar 23 13:26:29 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/19.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC19
+    jobid: 10
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/19.RDS
+    wildcards: nPC=19
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 19
+Submitted job 10 with external jobid 'Submitted batch job 5048043'.
+
+[Thu Mar 23 13:26:29 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/14.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC14
+    jobid: 5
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/14.RDS
+    wildcards: nPC=14
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 14
+Submitted job 5 with external jobid 'Submitted batch job 5048044'.
+
+[Thu Mar 23 13:26:29 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/36.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC36
+    jobid: 27
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/36.RDS
+    wildcards: nPC=36
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 36
+Submitted job 27 with external jobid 'Submitted batch job 5048045'.
+
+[Thu Mar 23 13:26:29 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/29.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC29
+    jobid: 20
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/29.RDS
+    wildcards: nPC=29
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 29
+Submitted job 20 with external jobid 'Submitted batch job 5048046'.
+
+[Thu Mar 23 13:26:29 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/23.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC23
+    jobid: 14
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/23.RDS
+    wildcards: nPC=23
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 23
+Submitted job 14 with external jobid 'Submitted batch job 5048047'.
+
+[Thu Mar 23 13:26:29 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/22.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC22
+    jobid: 13
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/22.RDS
+    wildcards: nPC=22
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 22
+Submitted job 13 with external jobid 'Submitted batch job 5048048'.
+
+[Thu Mar 23 13:26:30 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/10.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC10
+    jobid: 1
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/10.RDS
+    wildcards: nPC=10
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 10
+Submitted job 1 with external jobid 'Submitted batch job 5048049'.
+
+[Thu Mar 23 13:26:30 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/37.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC37
+    jobid: 28
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/37.RDS
+    wildcards: nPC=37
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 37
+Submitted job 28 with external jobid 'Submitted batch job 5048050'.
+
+[Thu Mar 23 13:26:30 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/30.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC30
+    jobid: 21
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/30.RDS
+    wildcards: nPC=30
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 30
+Submitted job 21 with external jobid 'Submitted batch job 5048051'.
+
+[Thu Mar 23 13:26:30 2023]
+rule run_script:
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/20.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC20
+    jobid: 11
+    reason: Missing output files: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/20.RDS
+    wildcards: nPC=20
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+/ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 20
+Submitted job 11 with external jobid 'Submitted batch job 5048052'.
+[Thu Mar 23 13:27:34 2023]
+Error in rule run_script:
+    jobid: 29
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/38.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC38 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 38
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048033
+
+Error executing rule run_script on cluster (jobid: 29, external: Submitted batch job 5048033, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.29.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:27:34 2023]
+Error in rule run_script:
+    jobid: 15
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/24.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC24 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 24
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048034
+
+Error executing rule run_script on cluster (jobid: 15, external: Submitted batch job 5048034, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.15.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:27:34 2023]
+Error in rule run_script:
+    jobid: 6
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/15.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC15 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 15
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048035
+
+Error executing rule run_script on cluster (jobid: 6, external: Submitted batch job 5048035, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.6.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:27:34 2023]
+Error in rule run_script:
+    jobid: 2
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/11.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC11 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 11
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048036
+
+Error executing rule run_script on cluster (jobid: 2, external: Submitted batch job 5048036, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.2.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:27:34 2023]
+Error in rule run_script:
+    jobid: 30
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/39.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC39 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 39
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048037
+
+Error executing rule run_script on cluster (jobid: 30, external: Submitted batch job 5048037, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.30.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:27:45 2023]
+Error in rule run_script:
+    jobid: 23
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/32.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC32 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 32
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048038
+
+Error executing rule run_script on cluster (jobid: 23, external: Submitted batch job 5048038, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.23.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:27:45 2023]
+Error in rule run_script:
+    jobid: 16
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/25.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC25 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 25
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048039
+
+Error executing rule run_script on cluster (jobid: 16, external: Submitted batch job 5048039, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.16.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:27:45 2023]
+Error in rule run_script:
+    jobid: 7
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/16.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC16 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 16
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048040
+
+Error executing rule run_script on cluster (jobid: 7, external: Submitted batch job 5048040, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.7.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:27:45 2023]
+Error in rule run_script:
+    jobid: 3
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/12.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC12 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 12
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048041
+
+Error executing rule run_script on cluster (jobid: 3, external: Submitted batch job 5048041, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.3.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:27:45 2023]
+Error in rule run_script:
+    jobid: 19
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/28.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC28 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 28
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048042
+
+Error executing rule run_script on cluster (jobid: 19, external: Submitted batch job 5048042, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.19.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:28:26 2023]
+Error in rule run_script:
+    jobid: 10
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/19.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC19 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 19
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048043
+
+Error executing rule run_script on cluster (jobid: 10, external: Submitted batch job 5048043, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.10.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:28:26 2023]
+Error in rule run_script:
+    jobid: 5
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/14.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC14 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 14
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048044
+
+Error executing rule run_script on cluster (jobid: 5, external: Submitted batch job 5048044, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.5.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:28:26 2023]
+Error in rule run_script:
+    jobid: 27
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/36.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC36 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 36
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048045
+
+Error executing rule run_script on cluster (jobid: 27, external: Submitted batch job 5048045, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.27.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:28:26 2023]
+Error in rule run_script:
+    jobid: 20
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/29.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC29 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 29
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048046
+
+Error executing rule run_script on cluster (jobid: 20, external: Submitted batch job 5048046, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.20.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:28:26 2023]
+Error in rule run_script:
+    jobid: 14
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/23.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC23 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 23
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048047
+
+Error executing rule run_script on cluster (jobid: 14, external: Submitted batch job 5048047, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.14.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:28:36 2023]
+Error in rule run_script:
+    jobid: 13
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/22.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC22 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 22
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048048
+
+Error executing rule run_script on cluster (jobid: 13, external: Submitted batch job 5048048, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.13.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:28:36 2023]
+Error in rule run_script:
+    jobid: 1
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/10.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC10 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 10
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048049
+
+Error executing rule run_script on cluster (jobid: 1, external: Submitted batch job 5048049, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.1.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:28:36 2023]
+Error in rule run_script:
+    jobid: 28
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/37.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC37 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 37
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048050
+
+Error executing rule run_script on cluster (jobid: 28, external: Submitted batch job 5048050, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.28.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:28:36 2023]
+Error in rule run_script:
+    jobid: 21
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/30.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC30 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 30
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048051
+
+Error executing rule run_script on cluster (jobid: 21, external: Submitted batch job 5048051, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.21.sh). For error details see the cluster log and the log files of the involved rule(s).
+[Thu Mar 23 13:28:36 2023]
+Error in rule run_script:
+    jobid: 11
+    input: ABOUT
+    output: /home/l/lmorrill/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/clustering_nPCs/20.RDS
+    log: logs/log_compute_clusters_PCs_resolution_nPC20 (check log file(s) for error details)
+    shell:
+        /ceph/package/c7/R-base/4.2.0/bin/Rscript compute_clusters_PCs_resolution.R --nPCs 20
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+    cluster_jobid: Submitted batch job 5048052
+
+Error executing rule run_script on cluster (jobid: 11, external: Submitted batch job 5048052, jobscript: /Filers/home/l/lmorrill/projects/lighting/2_analyses/compute_clusters/.snakemake/tmp.maha6s2k/snakejob.run_script.11.sh). For error details see the cluster log and the log files of the involved rule(s).
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2023-03-23T132627.756871.snakemake.log

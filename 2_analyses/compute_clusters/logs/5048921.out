@@ -1,0 +1,219 @@
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 82584
+Number of edges: 2365898
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9129
+Number of communities: 78
+Elapsed time: 24 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 82584
+Number of edges: 2365898
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9951
+Number of communities: 46
+Elapsed time: 28 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 82584
+Number of edges: 2365898
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9913
+Number of communities: 48
+Elapsed time: 30 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 82584
+Number of edges: 2365898
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9809
+Number of communities: 50
+Elapsed time: 29 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 82584
+Number of edges: 2365898
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9680
+Number of communities: 52
+Elapsed time: 30 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 82584
+Number of edges: 2365898
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9546
+Number of communities: 61
+Elapsed time: 28 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 82584
+Number of edges: 2365898
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9288
+Number of communities: 73
+Elapsed time: 30 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 82584
+Number of edges: 2365898
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9049
+Number of communities: 85
+Elapsed time: 28 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 82584
+Number of edges: 2365898
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8739
+Number of communities: 103
+Elapsed time: 23 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 82584
+Number of edges: 2365898
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8196
+Number of communities: 146
+Elapsed time: 27 seconds
+CBB Profiling started Thu Mar 23 16:49:14 2023
+SLURM_JOB_ID		5048921
+REQ_CPU_CORES		1
+REQ_MEMORY_GB		10.000000
+Starting profiling...
+
+                                                                                
+                                                                                
+                                    CPU (cores)                                 
+  1.2 +---------------------------------------------------------------------+   
+      |           +          +           +           +          +           |   
+      |                                                                     |   
+      |                                                                     |   
+    1 |############################################################*      +-|   
+      |#                                                          #         |   
+      |                                                           #         |   
+      |                                                           #         |   
+  0.8 |-+                                                         #       +-|   
+      |                                                           #         |   
+      |                                                           #         |   
+  0.6 |-+                                                         #       +-|   
+      |                                                           #         |   
+      |                                                           #         |   
+      |                                                           #         |   
+  0.4 |-+                                                         #       +-|   
+      |                                                           #         |   
+      |                                                           #         |   
+      |                                                           #         |   
+  0.2 |-+                                                         #       +-|   
+      |                                                           #         |   
+      |                                                           #         |   
+      |           +          +           +           +          + #         |   
+    0 +---------------------------------------------------------------------+   
+      0          100        200         300         400        500         600  
+                                Job profiling step                              
+                                                                                
+
+                                                                                
+                                                                                
+                                   Memory (GB)                                  
+  10 +----------------------------------------------------------------------+   
+     |           +           +           +          +           +           |   
+   9 |-+                                                                  +-|   
+     |                                                                      |   
+     |                                                                      |   
+   8 |-+                                                                  +-|   
+     |                                                                      |   
+   7 |-+                                                                  +-|   
+     |                                        #####################         |   
+   6 |-+         ######             ###########                   #       +-|   
+     |       ##  #    #   ##########                              #         |   
+   5 |-+     ##  #    #####                                       #       +-|   
+     |       #####                                                #         |   
+     |   #####                                                    #         |   
+   4 |-+ #                                                        #       +-|   
+     |  #                                                         #         |   
+   3 |-+#                                                         #       +-|   
+     | ##                                                         #         |   
+   2 |-#                                                          #       +-|   
+     | #                                                          #         |   
+     |##                                                          #         |   
+   1 |#+                                                          #       +-|   
+     |#          +           +           +          +           + #         |   
+   0 +----------------------------------------------------------------------+   
+     0          100         200         300        400         500         600  
+                               Job profiling step                               
+                                                                                
+
+                                                                                
+                                                                                
+                                  Data read (GB)                                
+    1 +---------------------------------------------------------------------+   
+      |           +          +           +           +          +           |   
+      |                                                                     |   
+      |                                                                     |   
+      |                                                                     |   
+      |                                                                     |   
+  0.5 |-+                                                                 +-|   
+      |                                                                     |   
+      |                                                                     |   
+      |                                                                     |   
+      |                                                                     |   
+    0 |#############################################################      +-|   
+      |                                                                     |   
+      |                                                                     |   
+      |                                                                     |   
+      |                                                                     |   
+      |                                                                     |   
+ -0.5 |-+                                                                 +-|   
+      |                                                                     |   
+      |                                                                     |   
+      |                                                                     |   
+      |                                                                     |   
+      |           +          +           +           +          +           |   
+   -1 +---------------------------------------------------------------------+   
+      0          100        200         300         400        500         600  
+                                Job profiling step                              
+                                                                                
+
+                                                                                
+                                                                                
+                                  Data written (GB)                             
+   0.01 +-------------------------------------------------------------------+   
+        |          +           +          +          +           +          |   
+  0.009 |-+                                                        #      +-|   
+        |                                                         ##        |   
+        |                                                         ##        |   
+  0.008 |-+                                                    #####      +-|   
+        |                                                   ####            |   
+  0.007 |-+                                              ####             +-|   
+        |                                             ####                  |   
+  0.006 |-+                                        ###                    +-|   
+        |                                      ####                         |   
+  0.005 |-+                                 ####                          +-|   
+        |                                ####                               |   
+        |                             ####                                  |   
+  0.004 |-+                        ####                                   +-|   
+        |                       ####                                        |   
+  0.003 |-+                  ###                                          +-|   
+        |                ####                                               |   
+  0.002 |-+           ####                                                +-|   
+        |          ####                                                     |   
+        |       ####                                                        |   
+  0.001 |-+  ####                                                         +-|   
+        |#####     +           +          +          +           +          |   
+      0 +-------------------------------------------------------------------+   
+        0         100         200        300        400         500        600  
+                                 Job profiling step                             
+                                                                                

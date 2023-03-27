@@ -16,17 +16,19 @@ library(tidyr)
 library(dplyr)
 theme_set(theme_cowplot())
 
+aligner <- 'cellranger'
+cellrangerrun <- 'Charly' ## /Charly/Lena
+
 #--------------------------------------------------------------------------------#
 
-local <- T
+setwd(dirname(rstudioapi::getSourceEditorContext()$path))
+local <- F
 if(local){
-  setwd(dirname(rstudioapi::getSourceEditorContext()$path))
   # folder_input <- '../../github-repo-lightning-DE/3_results_local/dmel649Chrimson/' ## not all files are available
   folder_input <- '../../github-repo-lightning-DE/3_results_local/dmel649CORRECTED//' ## not all files are available
 }else{
   ## CCB cluster
-  setwd("/t1-data/project/cncb/shared/proj002/analyses/2020/10kCells/")
-  folder_input <- './' 
+  folder_input <- '/project/cncb/shared/proj002/analyses/2020/10kCells/' 
 }
 
 source("helper_functions.R")
@@ -39,14 +41,25 @@ samples
 input_files <- lapply(samples, function(rep_it){
   cat(rep_it, '\n')
   # filtered_folder <- paste0(folder_input, rep_it, '/', rep_it, '/outs/filtered_feature_bc_matrix')
-  raw_folder <- paste0(folder_input, rep_it, '/', rep_it, '/outs/raw_feature_bc_matrix')
+  
+  if( (aligner == 'cellranger') & (cellrangerrun == 'Lena')){
+    raw_folder <- paste0(folder_input, rep_it, '/', rep_it, '/outs/raw_feature_bc_matrix')
+    
+  }else if( (aligner == 'cellranger') & (cellrangerrun == 'Charly')){
+    raw_folder <- paste0(folder_input, 'FEB2019_', rep_it, '/', '/outs/raw_feature_bc_matrix')
+  }    
+
   # print(raw_folder)
   DropletUtils::read10xCounts(raw_folder)
   # DropletUtils::read10xCounts(filtered_folder)
 })
 names(input_files) <- samples
 
-input_files_single_obj <- DropletUtils::read10xCounts(paste0(folder_input, samples, '/', samples, '/outs/raw_feature_bc_matrix'))
+if( (aligner == 'cellranger') & (cellrangerrun == 'Lena')){
+  input_files_single_obj <- DropletUtils::read10xCounts(paste0(folder_input, samples, '/', samples, '/outs/raw_feature_bc_matrix'))
+}else if( (aligner == 'cellranger') & (cellrangerrun == 'Charly')){
+  input_files_single_obj <- DropletUtils::read10xCounts(paste0(folder_input, 'FEB2019_', samples, '/', '/outs/raw_feature_bc_matrix'))
+}   
 
 #--------------------------------------------------------------------------------#
 
