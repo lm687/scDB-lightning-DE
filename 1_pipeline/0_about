@@ -35,4 +35,4 @@ pip install kb-python ## download kallisto bus in this environment (https://www.
 ##----------------------------------------------------------------------------------------------------------------#
 
 
-
+cp /project/cncb/imorgan/3_analysis/sanity_check/fastq_screen_contamination_analysis/FastQ_Screen_Genomes/fastq_screen.conf .

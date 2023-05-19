@@ -475,3 +475,11 @@ umap_plot_single_group <- function(seurat_obj, group.by, group_name, split_umap=
     UMAPPlot(seurat_obj, group.by='cur')
   }
 }
+
+
+transform_metadata_featureplot <- function(dataset, feature, trans='log2', ...){
+  cat('Using umap by default')
+  if(trans == 'log2')  dataset@meta.data[,'x'] <- log2(dataset@meta.data[,feature])
+  else if(trans == 'log2p1')  dataset@meta.data[,'x'] <- log2(1+dataset@meta.data[,feature])
+  FeaturePlot(dataset, features =  'x', ...)
+}

@@ -1,0 +1,170 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 7
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=5119, mem_mib=4882, disk_mb=5119, disk_mib=4882
+Select jobs to execute...
+
+[Tue May  2 18:57:56 2023]
+rule fastqscreen:
+    input: /project/cncb/imorgan/1_fastq/FASTQ/973017_TY37_S11_L002_R2_001.fastq.gz
+    output: /project/sims-lab/lmorrill/data/lightning/fastQCScreen/973017_TY37_S11_L002_R2_001_screen.html
+    jobid: 0
+    reason: Missing output files: /project/sims-lab/lmorrill/data/lightning/fastQCScreen/973017_TY37_S11_L002_R2_001_screen.html
+    wildcards: fastq_file=973017_TY37_S11_L002_R2_001
+    resources: mem_mb=5119, mem_mib=4882, disk_mb=5119, disk_mib=4882, tmpdir=/var/scratch/lmorrill/5145157
+
+module add bowtie2; /home/l/lmorrill/t1data/conda/rufus_env/envs/bioinformatics_software/bin/fastq_screen  --force --aligner 'bowtie2' --conf fastq_screen.conf /project/cncb/imorgan/1_fastq/FASTQ/973017_TY37_S11_L002_R2_001.fastq.gz --filter 333------------ --tag --outdir /project/sims-lab/lmorrill/data/lightning/fastQCScreen/
+Can't locate Data/Dumper.pm in @INC (@INC contains: /usr/local/lib64/perl5 /usr/local/share/perl5 /usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib64/perl5 /usr/share/perl5 .) at /home/l/lmorrill/t1data/conda/rufus_env/envs/bioinformatics_software/bin/fastq_screen line 13.
+BEGIN failed--compilation aborted at /home/l/lmorrill/t1data/conda/rufus_env/envs/bioinformatics_software/bin/fastq_screen line 13.
+[Tue May  2 18:57:56 2023]
+Error in rule fastqscreen:
+    jobid: 0
+    input: /project/cncb/imorgan/1_fastq/FASTQ/973017_TY37_S11_L002_R2_001.fastq.gz
+    output: /project/sims-lab/lmorrill/data/lightning/fastQCScreen/973017_TY37_S11_L002_R2_001_screen.html
+    shell:
+        module add bowtie2; /home/l/lmorrill/t1data/conda/rufus_env/envs/bioinformatics_software/bin/fastq_screen  --force --aligner 'bowtie2' --conf fastq_screen.conf /project/cncb/imorgan/1_fastq/FASTQ/973017_TY37_S11_L002_R2_001.fastq.gz --filter 333------------ --tag --outdir /project/sims-lab/lmorrill/data/lightning/fastQCScreen/
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Using cellranger
+    sample                                              cells
+0  G1_rep1  636200_14,654654_14,660727_14,660728_14,660729...
+1  G1_rep2  636200_18,654654_18,660727_18,660728_18,660729...
+2  G2_rep1  636200_15,654654_15,660727_15,660728_15,660729...
+3  G2_rep2  636200_19,654654_19,660727_19,660728_19,660729...
+4  G3_rep1  636200_16,654654_16,660727_16,660728_16,660729...
+5  G3_rep2  636200_20,654654_20,660727_20,660728_20,660729...
+6  G4_rep1  636200_17,654654_17,660727_17,660728_17,660729...
+7  G4_rep2  636200_21,654654_21,660727_21,660728_21,660729...
+['973017_TY33_S7_L002_I1_001', '973017_TY33_S7_L002_R2_001', '973017_TY40_S14_L002_R2_001', '973017_TY38_S12_L002_R2_001', '973017_TY34_S8_L002_R2_001', '973017_TY39_S13_L002_R1_001', '973017_TY39_S13_L002_I1_001', '973017_TY33_S7_L002_I2_001', '973017_TY36_S10_L002_R1_001', '973017_TY36_S10_L002_I1_001', '973017_TY40_S14_L002_I2_001', '973017_TY39_S13_L002_R2_001', '973017_TY33_S7_L002_R1_001', '973017_TY34_S8_L002_I1_001', '973017_TY38_S12_L002_I2_001', '973017_TY35_S9_L002_I1_001', '973017_TY35_S9_L002_R2_001', '973017_TY35_S9_L002_R1_001', '973017_TY39_S13_L002_I2_001', '973017_TY34_S8_L002_I2_001', '973017_TY40_S14_L002_R1_001', '973017_TY37_S11_L002_R2_001', '973017_TY35_S9_L002_I2_001', '973017_TY38_S12_L002_R1_001', '973017_TY40_S14_L002_I1_001', '973017_TY38_S12_L002_I1_001', '973017_TY37_S11_L002_I1_001', '973017_TY36_S10_L002_R2_001', '973017_TY37_S11_L002_R1_001', '973017_TY36_S10_L002_I2_001', '973017_TY37_S11_L002_I2_001', '973017_TY34_S8_L002_R1_001']
+CBB Profiling started Tue May  2 18:57:54 2023
+SLURM_JOB_ID		5145157
+REQ_CPU_CORES		7
+REQ_MEMORY_GB		70.000000
+Starting profiling...
+
+                                                                                
+                                                                                
+                                   CPU (cores)                                  
+  7 +-----------------------------------------------------------------------+   
+    |                 +                 +                 +                 |   
+    |                                                                       |   
+  6 |-+                                                                   +-|   
+    |                                                                       |   
+    |                                                                       |   
+    |                                                                       |   
+  5 |-+                                                                   +-|   
+    |                                                                       |   
+    |                                                                       |   
+  4 |-+                                                                   +-|   
+    |                                                                       |   
+    |                                                                       |   
+  3 |-+                                                                   +-|   
+    |                                                                       |   
+    |                                                                       |   
+  2 |-+                                                                   +-|   
+    |                                                                       |   
+    |                                                                       |   
+    |                                                                       |   
+  1 |-+                                                                   +-|   
+    |                          #############################################|   
+    |        ##################         +                 +                 |   
+  0 +-----------------------------------------------------------------------+   
+    0                0.5                1                1.5                2   
+                               Job profiling step                               
+                                                                                
+
+                                                                                
+                                                                                
+                                   Memory (GB)                                  
+  70 +----------------------------------------------------------------------+   
+     |                 +                 +                +                 |   
+     |                                                                      |   
+  60 |-+                                                                  +-|   
+     |                                                                      |   
+     |                                                                      |   
+     |                                                                      |   
+  50 |-+                                                                  +-|   
+     |                                                                      |   
+     |                                                                      |   
+  40 |-+                                                                  +-|   
+     |                                                                      |   
+     |                                                                      |   
+  30 |-+                                                                  +-|   
+     |                                                                      |   
+     |                                                                      |   
+  20 |-+                                                                  +-|   
+     |                                                                      |   
+     |                                                                      |   
+     |                                                                      |   
+  10 |-+                                                                  +-|   
+     |                                                                      |   
+     |                 +                 +                +                 |   
+   0 +----------------------------------------------------------------------+   
+     0                0.5                1               1.5                2   
+                               Job profiling step                               
+                                                                                
+
+                                                                                
+                                                                                
+                                    Data read (GB)                              
+  1.2e-05 +-----------------------------------------------------------------+   
+          |                +               +                +               |   
+          |                                                               ##|   
+          |                                                              #  |   
+    1e-05 |-+                                                          ## +-|   
+          |                                                           #     |   
+          |                                                         ##      |   
+          |                                                        #        |   
+    8e-06 |-+                                                    ##       +-|   
+          |                                                     #           |   
+          |                                                   ##            |   
+    6e-06 |-+                                                #            +-|   
+          |                                                ##               |   
+          |                                               #                 |   
+          |                                             ##                  |   
+    4e-06 |-+                                          #                  +-|   
+          |                                          ##                     |   
+          |                                         #                       |   
+          |                                       ##                        |   
+    2e-06 |-+                                    #                        +-|   
+          |                                    ##                           |   
+          |                                   #                             |   
+          |                +               +##              +               |   
+        0 +-----------------------------------------------------------------+   
+          0               0.5              1               1.5              2   
+                                  Job profiling step                            
+                                                                                
+
+                                                                                
+                                                                                
+                                  Data written (GB)                             
+  6e-05 +-------------------------------------------------------------------+   
+        |                +                +                +               #|   
+        |                                                                ## |   
+        |                                                              ##   |   
+  5e-05 |-+                                                          ##   +-|   
+        |                                                         ###       |   
+        |                                                       ##          |   
+        |                                                     ##            |   
+  4e-05 |-+                                                ###            +-|   
+        |                                                ##                 |   
+        |                                              ##                   |   
+  3e-05 |-+                                          ##                   +-|   
+        |                                         ###                       |   
+        |                                       ##                          |   
+        |                                     ##                            |   
+  2e-05 |-+                                 ##                            +-|   
+        |                               ####                                |   
+        |                          #####                                    |   
+        |                     #####                                         |   
+  1e-05 |-+              #####                                            +-|   
+        |            ####                                                   |   
+        |       #####                                                       |   
+        |  #####         +                +                +                |   
+      0 +-------------------------------------------------------------------+   
+        0               0.5               1               1.5               2   
+                                 Job profiling step                             
+                                                                                

@@ -20,6 +20,32 @@ elif alignment_type == 'kallisto':
 else:
         print('Specify <alignment_type>')
 
+# ------------------------------------------------------------------------------------------------------------------------------------- #
+
+def give_fastq_for_sample(sample_it):
+        append_all = []
+        subfolder=([flder + x for x in SAMPLES[SAMPLES['sample'] == sample_it]['cells'].iloc[0].split(',')])
+        subfolder = [x.strip()+'/' for x in subfolder]
+        for subfolder_it in subfolder:
+                subfiles=([x for x in os.listdir(subfolder_it)])
+                append_all.append([subfolder_it+x for x in subfiles if '_R1_001.fastq.gz' in x][0])
+                append_all.append([subfolder_it+x for x in subfiles if '_R2_001.fastq.gz' in x][0])
+        return(' '.join(append_all))
+
+def give_fastq_for_cell(cell_it):
+        append_all = []
+        subfolder_it = flder + cell_it.strip() + '/' 
+        subfiles=([x for x in os.listdir(subfolder_it)])
+        append_all.append([subfolder_it+x for x in subfiles if '_R1_001.fastq.gz' in x][0])
+        append_all.append([subfolder_it+x for x in subfiles if '_R2_001.fastq.gz' in x][0])
+        return(append_all)
+
+def flatten(l):
+    return [item for sublist in l for item in sublist]
+
+# ------------------------------------------------------------------------------------------------------------------------------------- #
+
+
 SAMPLES = pd.read_csv("samples.csv", sep='\t')
 print(SAMPLES)
 # 0  G1_rep1  636200_14,654654_14,660727_14,660728_14,660729...
@@ -40,7 +66,7 @@ print(SAMPLES)
 #transcriptome_version = 'dmel649CORRECTED'
 #transcriptome_version = 'dmel649Chrimson'
 transcriptome_version = 'dmel649ChrimsonV2'
-transcriptome="/project/sims-lab/lmorrill/data/genomes/" + transcriptome_version
+transcriptome="/project/sims-lab/lmorrill/data/general/genomes/" + transcriptome_version
 chemistry="SC3Pv3"
 local_memory="100"
 local_cores="24"
@@ -50,36 +76,35 @@ flder='/project/cncb/shared/proj002/backup/CELLRANGER_OUT/'
 folder_out_alignment = folder_out_alignment + transcriptome_version + '/'
 folder_out_QC = '/project/sims-lab/lmorrill/data/lightning/multiQC/'
 folder_out_fastQC = '/project/sims-lab/lmorrill/data/lightning/fastQC/'
+folder_out_fastQCScreen = '/project/sims-lab/lmorrill/data/lightning/fastQCScreen/'
+#folder_water = '/project/cncb/imorgan/3_analysis/sanity_check/links_fastq_water_mem/' ## not used
+folder_salt = '/project/cncb/imorgan/1_fastq/FASTQ/'
 
-# ------------------------------------------------------------------------------------------------------------------------------------- #
+salt_on = True
+if salt_on:
+    flder=folder_salt
+else:
+    all_fastq = (flatten([x.split(',') for x in SAMPLES['cells']]))
+    #all_fastq = all_fastq
 
-def give_fastq_for_sample(sample_it):
-	append_all = []
-	subfolder=([flder + x for x in SAMPLES[SAMPLES['sample'] == sample_it]['cells'].iloc[0].split(',')])
-	subfolder = [x.strip()+'/' for x in subfolder]
-	for subfolder_it in subfolder:
-		subfiles=([x for x in os.listdir(subfolder_it)])
-		append_all.append([subfolder_it+x for x in subfiles if '_R1_001.fastq.gz' in x][0])             
-		append_all.append([subfolder_it+x for x in subfiles if '_R2_001.fastq.gz' in x][0])
-	return(' '.join(append_all))
+    all_fastq_names = [give_fastq_for_cell(x)[1].replace(flder, '').replace('.fastq.gz', '') for x in all_fastq]
+    #print(all_fastq_names)
 
+    #print([flder+x+".fastq.gz" for x in all_fastq_names])
 
-def flatten(l):
-    return [item for sublist in l for item in sublist]
-
-# ------------------------------------------------------------------------------------------------------------------------------------- #
-
-all_fastq = (flatten([x.split(',') for x in SAMPLES['cells']]))
-exit
-
+#all_fastq_water = os.listdir(folder_water)
+#print(all_fastq_water)
+all_fastq_salt = [x.replace('.fastq.gz', '') for x in os.listdir(folder_salt)]
+print(all_fastq_salt)
 
 rule all:
     input:
         #expand(folder_out_alignment+"{sample}/{sample}/outs/filtered_feature_bc_matrix/features.tsv.gz", sample=SAMPLES["sample"]) ## run cellranger
         #expand(folder_out_alignment+"{sample}/counts_unfiltered/cells_x_genes.mtx", sample=SAMPLES["sample"]) ## run kallisto
         #expand(folder_out_QC+"{name_out}/", name_out=all_fastq)
-        expand(folder_out_fastQC+"{name_out}/", name_out=all_fastq)
-
+        #expand(folder_out_fastQC+"{fastq_file}/", fastq_file=all_fastq)
+        #expand(folder_out_fastQCScreen+"{fastq_file}_screen.html", fastq_file=all_fastq_names)
+        expand(folder_out_fastQCScreen+"{fastq_file}_screen.html", fastq_file=[x for x in all_fastq_salt if '_R2_' in x])
 
 
 ## The reference has been created as follow, and as specified in <~/projects/general/genomes_kallisto/about >
@@ -110,20 +135,33 @@ rule cellranger_count:
         ## note that any folder which has been created for the output should be deleted first, as otherwise cellranger throws an error
         "cd {folder_out_alignment}/{wildcards.sample}; " + "rm -r " + folder_out_alignment +"{wildcards.sample}/{wildcards.sample}; " + "/project/sims-lab/lmorrill/cellranger/cellranger-7.1.0/bin/cellranger count --id={wildcards.sample} --fastqs=/project/cncb/shared/proj002/backup/CELLRANGER_OUT/ --sample={params.cells} --transcriptome={transcriptome} --chemistry={chemistry} --force-cells=10000 --nosecondary"
 
-rule multiqc:
-    input:
-        flder+"{fastq_name}"
-    output:
-        folder_out_QC + "{fastq_name}/"        
-    shell:
-        'multiqc {input} --outdir ' + folder_out_QC 
+#rule multiqc:
+#   input:
+#        flder+"{fastq_name}"
+#    output:
+#        folder_out_QC + "{fastq_name}/"        
+#    shell:
+#        'multiqc {input} --outdir ' + folder_out_QC 
 
 
 rule fastqc:
     input:
-        flder+"{fastq_name}/*"
+        lambda wildcards: give_fastq_for_cell(wildcards.fastq_file)[1]
     output:
-        folder_out_fastQC + "{fastq_name}/"
+        folder_out_fastQC + "{fastq_file}/"
     shell:
         '/project/sims-lab/lmorrill/software/FastQC/./fastqc --outdir ' + folder_out_fastQC + ' -f {input}'
+
+rule fastqscreen:
+    input:
+         flder+"{fastq_file}.fastq.gz"
+    output:
+         folder_out_fastQCScreen+"{fastq_file}"+"_screen.html"
+    shell:
+        ## 333----------- : repetitive regions found in several mammals, and possibly the other species. suspected polyG tails or repeats of some sort
+        "module add bowtie2; /home/l/lmorrill/t1data/conda/rufus_env/envs/bioinformatics_software/bin/fastq_screen  --force --aligner 'bowtie2' --conf fastq_screen.conf {input} --filter 333------------ --tag --outdir " + folder_out_fastQCScreen
+        ## 00000000000000: no hits
+#        "module add bowtie2; /home/l/lmorrill/t1data/conda/rufus_env/envs/bioinformatics_software/bin/fastq_screen  --force --aligner 'bowtie2' --conf fastq_screen.conf {input} --filter 00000000000000 --tag --outdir " + folder_out_fastQCScreen ## no hits
+
+
 

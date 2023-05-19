@@ -12,7 +12,10 @@ local <- F
 folder_results <- "~/projects/lighting/3_results/" ## CCB cluster
 robject_folder <- "~/projects/lighting/data/robjects/" ## CCB cluster
 genome <- 'dmel649ChrimsonV2'
+genome <- 'dmel649ChrimsonV2StringentFiltering' ## removing cells which have lower number of reads (but that still passed Charly's filter!)
 input_objs <- paste0('KB-', genome)
+# input_objs <- paste0('KB_onlyG1G2-', genome)
+
 robject_folder <- paste0(robject_folder, input_objs, '/')
 system(paste0("mkdir -p ", folder_results, input_objs))
 system(paste0("mkdir -p ", robject_folder))
@@ -87,12 +90,16 @@ plot_gene_rank <- function(markers, n) {
 ##--------------------------------------------------------------------------------------------------##
 samples <- apply(expand.grid(paste0('G', 1:4), paste0('_rep', 1:2)), 1, paste0, collapse='')
 samples
+
+if(grepl('onlyG1G2', input_objs)){
+  samples <- samples[grepl('G1_', samples) | grepl('G2_', samples)]
+}
 ##--------------------------------------------------------------------------------------------------##
 
 ##--------------------------------------------------------------------------------------------------##
 ## read counts; check presence of chrimson
 res_mat <- lapply(samples, function(i){
-  read_count_output(paste0("~/projects/lighting/data/lightning/alignment/KallistoOUT/", genome, "/",
+  read_count_output(paste0("~/projects/lighting/data/lightning/alignment/KallistoOUT/", gsub('StringentFiltering', '', genome), "/",
   i, "/counts_unfiltered"), name = "cells_x_genes")
 })
 names(res_mat) <- samples
@@ -141,6 +148,34 @@ for(i in samples){
 ##--------------------------------------------------------------------------------------------------##
 ## independent objects to be created after
 seu <- lapply(res_mat, function(i) CreateSeuratObject(i, min.cells = 3, min.features = 200))
+
+## remove cells if there is any further filtering that we want to do
+if(genome == 'dmel649ChrimsonV2StringentFiltering'){
+  warning('Filtering cells with further filters')
+  Fullobj <- readRDS("~/projects/lighting/data/robjects/KB-dmel649ChrimsonV2/combined_dataset.RDS")
+  Fullobj$origin <- gsub("^.*_","", colnames(Fullobj@assays$RNA@counts))
+  StringentFilteringobj <- readRDS("~/projects/DrosophilaBrainAnnotation/out/robjects/annotation_Chrimson/KB-dmel649ChrimsonV2/chrimson_dataset.RDS")
+  table(Fullobj$origin)
+  table(StringentFilteringobj$origin)
+  plot(as.vector(table(Fullobj$origin)), as.vector(table(StringentFilteringobj$origin)));abline(coef = c(0,1))
+
+  dimnames(StringentFilteringobj)[[2]]
+  StringentFilteringobj$origin <- samples[as.numeric(StringentFilteringobj$origin)]
+  text(sapply(seu[samples], function(i) length(dimnames(i)[[2]])),
+       as.vector(table(StringentFilteringobj$origin)[samples]), label=samples);abline(coef = c(0,1))
+  ## remove the cells
+  seu_nofilt <- seu
+  for(i in samples){
+    stopifnot(all(gsub("_.*", "", dimnames(StringentFilteringobj)[[2]][StringentFilteringobj$origin == i]) %in% dimnames(seu[[i]])[[2]]))
+    seu[[i]] <- subset(seu[[i]], cells=gsub("_.*", "", dimnames(StringentFilteringobj)[[2]][StringentFilteringobj$origin == i]))
+  }
+  sapply(samples, function(i) c(nofilt=dim(seu_nofilt[[i]])[2], filt=dim(seu[[i]])[2]))
+  # >   sapply(samples, function(i) c(nofilt=dim(seu_nofilt[[i]])[2], filt=dim(seu[[i]])[2]))
+  # G1_rep1 G2_rep1 G3_rep1 G4_rep1 G1_rep2 G2_rep2 G3_rep2 G4_rep2
+  # nofilt   13535   13649   11099    2205   44191   40246   16526    9843
+  # filt      4323    3448    3943    1808    6942    6816    4993    3473
+  rm(seu_nofilt)
+}
 
 for(i in samples){
   seu[[i]][["percent.mt"]] <- PercentageFeatureSet(seu[[i]], pattern = "^mt:")
