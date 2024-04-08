@@ -1,2 +1,0 @@
-rm *tar.gz
-for i in sps*; do rm -r $i; done

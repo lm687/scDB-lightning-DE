@@ -1,3 +1,0 @@
-ModuleNotFoundError in file /Filers/home/l/lmorrill/projects/lighting/1_pipeline/Snakefile, line 1:
-No module named 'ruffus'
-  File "/Filers/home/l/lmorrill/projects/lighting/1_pipeline/Snakefile", line 1, in <module>

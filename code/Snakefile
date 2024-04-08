@@ -1,0 +1,115 @@
+
+import pandas as pd
+
+#---------------------------------------------------------------------------------------------------------#
+path_to_R = '/ceph/package/u22/R-base/4.3.0/bin/'
+#---------------------------------------------------------------------------------------------------------#
+
+#---------------------------------------------------------------------------------------------------------#
+folder_input_fastq = '/project/cncb/shared/proj002/backup/CELLRANGER_OUT/'
+
+folder_robjects='../robjects/'
+folder_results='../results/'
+
+folder_out_alignment_cellranger_original='/project/cncb/shared/proj002/backup/CELLRANGER_OUT/'
+folder_out_alignment_cellranger="../data/1_alignment/cellrangerOUT/"
+folder_out_alignment_kallisto="../data/1_alignment/KallistoOUT/"
+
+folder_out_QC = '../data/multiQC/'
+folder_out_fastQC = '../data/fastQC/'
+folder_out_multiQC = '../data/multiQC/'
+folder_out_fastQCScreen = '../data/fastQCScreen/'
+
+folder_genome = '/home/l/lmorrill/projects/general/genomes/'
+#---------------------------------------------------------------------------------------------------------#
+
+#---------------------------------------------------------------------------------------------------------#
+SAMPLES = pd.read_csv("samples.csv", sep='\t')
+#---------------------------------------------------------------------------------------------------------#
+
+#---------------------------------------------------------------------------------------------------------#
+def get_alignment_files(genome):
+    if genome == 'KB-dmel649Chrimson':
+         return '../data/chrimson/1_alignment/KallistoOUT/dmel649Chrimson/'
+
+chemistry="SC3Pv3"
+
+#---------------------------------------------------------------------------------------------------------#
+
+
+#---------------------------------------------------------------------------------------------------------#
+rule all:
+    input:
+        expand(folder_out_alignment_cellranger+"{genome}/{sample}/{sample}/outs/filtered_feature_bc_matrix/features.tsv.gz", sample=SAMPLES["sample"], genome='dmel649ChrimsonV2') ## run cellranger
+        #expand(folder_out_alignment_kallisto+"{sample}/counts_unfiltered/cells_x_genes.mtx", sample=SAMPLES["sample"]) ## run kallisto
+        #expand(folder_out_QC+"{name_out}/", name_out=all_fastq)
+        #expand(folder_out_fastQC+"{fastq_file}/", fastq_file=all_fastq)
+        #expand(folder_out_fastQCScreen+"{fastq_file}_screen.html", fastq_file=all_fastq_names)
+        #expand(folder_out_fastQCScreen+"{fastq_file}_screen.html", fastq_file=[x for x in all_fastq_salt if '_R2_' in x])
+        #expand(folder_robjects+'{genome}/0_QC-normalise/0_filtered_normalised_individual_objects.RDS', genome=['KB-dmel649Chrimson'])
+#---------------------------------------------------------------------------------------------------------#
+
+
+#---------------------------------------------------------------------------------------------------------#
+
+## See README for information about index files
+rule kallisto_alignment:
+    input:
+        "../data/0_about_files/about-condition-{sample}.txt"
+    log:
+        "logs/kallisto_count_{sample}"
+    params:
+        cells= lambda wildcards: give_fastq_for_sample(wildcards.sample)
+    output:
+       folder_out_alignment_kallisto+"{sample}/counts_unfiltered/cells_x_genes.mtx"
+    shell:
+        'kb count ' + "{params.cells}  -o " + folder_out_alignment_kallisto + "{wildcards.sample} -i ~/projects/general/genomes_kallisto/dmel-all-r6.49_CORRECTED_Chrimson_KallistoINDEX -g ~/projects/general/genomes_kallisto/dmel-all-r6.49_CORRECTED_Chrimson_KallistoT2G -x 10XV3"
+
+rule cellranger_count:
+    input:
+        "../data/0_about_files/about-condition-{sample}.txt"
+    log:
+        "logs/cellranger_count_{genome}_{sample}"
+    params:
+        cells= lambda wildcards: SAMPLES[SAMPLES['sample'] == wildcards.sample]['cells'].iloc[0]
+    output:
+       folder_out_alignment_cellranger+"{genome}/{sample}/{sample}/outs/filtered_feature_bc_matrix/features.tsv.gz"
+    shell:
+        ## note that any folder which has been created for the output should be deleted first, as otherwise cellranger throws an error
+        "cd {folder_out_alignment_cellranger}/{wildcards.genome}/{wildcards.sample}; " + "rm -rf " + folder_out_alignment_cellranger +"{wildcards.genome}/{wildcards.sample}/{wildcards.sample}; " + "/project/sims-lab/lmorrill/software/cellranger/cellranger-7.1.0/bin/cellranger count --id={wildcards.sample} --fastqs={folder_input_fastq} --sample={params.cells} --transcriptome={folder_genome}{wildcards.genome} --chemistry={chemistry} --force-cells=10000 --nosecondary"
+        #"/project/sims-lab/lmorrill/software/cellranger/cellranger-7.1.0/bin/cellranger count --id={wildcards.sample} --fastqs={folder_input_fastq} --sample={params.cells} --transcriptome={folder_genome}{wildcards.genome} --chemistry={chemistry} --force-cells=10000 --nosecondary"
+
+
+rule fastqc:
+    input:
+        lambda wildcards: give_fastq_for_cell(wildcards.fastq_file)[1]
+    output:
+        folder_out_fastQC + "{fastq_file}/"
+    shell:
+        '/project/sims-lab/lmorrill/software/FastQC/./fastqc --outdir ' + folder_out_fastQC + ' -f {input}'
+
+
+rule fastqscreen:
+    input:
+         folder_out_alignment_cellranger_original+"{fastq_file}.fastq.gz"
+    output:
+         folder_out_fastQCScreen+"{fastq_file}"+"_screen.html"
+    shell:
+        "module add bowtie2; /home/l/lmorrill/t1data/conda/rufus_env/envs/bioinformatics_software/bin/fastq_screen  --force --aligner 'bowtie2' --conf fastq_screen.conf {input} --filter 333------------ --tag --outdir " + folder_out_fastQCScreen
+
+
+rule QC_normalise:
+    input:
+        '../data/0_about_files/{genome}'
+    output:
+        folder_robjects+'{genome}/0_QC-normalise/0_filtered_normalised_individual_objects.RDS'
+    params:
+        folder_alignment_files = lambda wildcards: get_alignment_files(wildcards.genome)
+    shell:
+        path_to_R+"Rscript 0_QC-normalise.R --genome {wildcards.genome} --folder_alignment_files {params.folder_alignment_files}"
+
+
+#---------------------------------------------------------------------------------------------------------#
+
+
+

@@ -1,8 +1,0 @@
-
-transcriptome: "data/refdata-cellranger-GRCh38-3.0.0"
-
-cellranger:
-    count:
-        threads: 8
-        memory: 8G
-
