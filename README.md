@@ -6,6 +6,11 @@ module load R-cbrg
 conda activate snakemake_scRNA
 ```
 
+## Computational requirements
+
+Step | Time (Day-Hours:Minutes:Seconds) | CPU | Mmeory (GB) | 
+--- | --- | --- | --- |
+Cellranger alignment | 1-00:40:00 | 1 | 15 | 
 
 ## Alignment
 ### Kallisto
